@@ -6,7 +6,6 @@ export const loginContainer = css`
     justify-content: space-between;
     min-height: 100vh;
     align-items: center;
-    padding: 15px;
 `
 
 export const topLights = css`
@@ -18,4 +17,5 @@ export const bottomLights = css`
 
 export const formContainer = css`
     text-align: center;
+    padding: 15px;
 `
