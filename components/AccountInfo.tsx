@@ -1,5 +1,15 @@
 export const AccountInfo = () => {
   return(
-    <div>Account info</div>
+    <div>
+      <div>
+        Connected to Northpole Servers: 
+      </div>
+      <div>
+        Logged in as: 
+      </div>
+      <div>
+        Status: 
+      </div>
+    </div>
   )
 }
