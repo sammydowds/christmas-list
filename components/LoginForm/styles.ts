@@ -8,7 +8,7 @@ export const form = css`
 `
 
 export const submitButton = css`
-    height: 40px;
+    height: 45px;
     font-size: 30px;
     background: red;
     color: white;
@@ -27,4 +27,5 @@ export const input = css`
     width: 100%;
     border-radius: 10px;
     font-size: 30px;
+    padding: 0px 15px;
 `
