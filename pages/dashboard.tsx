@@ -1,7 +1,6 @@
 /**@jsxImportSource @emotion/react */
 import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
-import { present } from "../components/List/styles"
 import * as styles from '../styles/styles'
 
 const presentsByPerson: { [name: string]: Present[] } = {
@@ -139,7 +138,7 @@ const Dashboard = () => {
     return(
         <div css={styles.dashboardContainer}>
             <div css={styles.dashboardColContainer}>
-                <AccountInfo />
+                <AccountInfo hasPresentsToBuy anyPresentsToBuy name={"Cassie"}/>
                 {Object.entries(presentsByPerson).map(([name, presents]) => {
                     return (
                         <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
