@@ -142,7 +142,7 @@ const Dashboard = () => {
                 <AccountInfo />
                 {Object.entries(presentsByPerson).map(([name, presents]) => {
                     return (
-                        <List listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
+                        <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
                     )
                 })}
                 <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={presentList}/>
