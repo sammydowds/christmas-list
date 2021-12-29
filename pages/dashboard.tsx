@@ -9,54 +9,63 @@ const defaultList: Present[] = [
         to: 'Justin',
         from: null,
         isBought: false,
+        id: '0'
     }, 
     {
         description: 'Red Ryder BB Gun', 
         to: 'Sammy',
         from: 'Sammy',
         isBought: false,
+        id: '1'
     }, 
     {
         description: 'New Shiny Truck', 
         to: 'Justin',
         from: 'Sammy',
         isBought: false,
+        id: '2'
     },
     {
         description: 'New Shiny Truck', 
         to: 'Justin',
         from: 'Sammy',
         isBought: false,
+        id: '3'
     }, 
     {
         description: 'Red Ryder BB Gun', 
         to: 'Sammy',
         from: 'Sammy',
         isBought: false,
+        id: '4'
     }, 
     {
         description: 'New Shiny Truck',
         to: 'Kate', 
         from: 'Sammy',
         isBought: false,
+        id: '5'
     },
     {
         description: 'New Shiny Truck', 
         to: 'Justin',
         from: 'Sammy',
         isBought: false,
+        id: '6'
     }, 
     {
         description: 'Red Ryder BB Gun', 
         to: 'Sammy',
         from: 'Sammy',
         isBought: false,
+        id: '7'
     }, 
     {
         description: 'New Shiny Truck', 
         to: 'Carly',
         from: 'Sammy',
         isBought: false,
+        id: '8'
     }
 ]
 

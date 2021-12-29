@@ -12,7 +12,7 @@ export interface Present {
   to: string
   from: string | null
   isBought: boolean
-  id?: string
+  id: string
 }
 
 interface ListItemProps {
@@ -23,20 +23,20 @@ interface ListItemProps {
 const ListItem = ({present, onClick, listType}: ListItemProps) => {
   if (listType === ListType.WISHLIST) {
     return (
-      <div onClick={onClick} css={[styles.present, present.from && styles.presentCrossedOff]}>
+      <div key={`${present.id}-wishlist`} onClick={onClick} css={[styles.present, present.from && styles.presentCrossedOff]}>
         {present.description}
       </div>
     )
   } else if (listType === ListType.SHOPPING) {
     return (
-      <div onClick={onClick} css={[styles.present, present.isBought && styles.presentCrossedOff]}>
+      <div key={`${present.id}-shopping`} onClick={onClick} css={[styles.present, present.isBought && styles.presentCrossedOff]}>
         {present.description}
         {present.to && <span> - {present.to}</span>}
       </div>
     )
   } else if (listType === ListType.OWN_WISHLIST) {
     return (
-      <div onClick={onClick}>
+      <div key={`${present.id}-own-wishlist`} onClick={onClick}>
         {present.description}
         {present.to && <span> - {present.to}</span>}
       </div>
