@@ -23,20 +23,20 @@ interface ListItemProps {
 const ListItem = ({present, onClick, listType}: ListItemProps) => {
   if (listType === ListType.WISHLIST) {
     return (
-      <div key={`${present.id}-wishlist`} onClick={onClick} css={[styles.present, present.from && styles.presentCrossedOff]}>
+      <div onClick={onClick} css={[styles.present, present.from && styles.presentCrossedOff]}>
         {present.description}
       </div>
     )
   } else if (listType === ListType.SHOPPING) {
     return (
-      <div key={`${present.id}-shopping`} onClick={onClick} css={[styles.present, present.isBought && styles.presentCrossedOff]}>
+      <div onClick={onClick} css={[styles.present, present.isBought && styles.presentCrossedOff]}>
         {present.description}
         {present.to && <span> - {present.to}</span>}
       </div>
     )
   } else if (listType === ListType.OWN_WISHLIST) {
     return (
-      <div key={`${present.id}-own-wishlist`} onClick={onClick}>
+      <div onClick={onClick}>
         {present.description}
         {present.to && <span> - {present.to}</span>}
       </div>
@@ -57,7 +57,7 @@ export const List = ({ presents, title, listType }: ListProps) => {
       <h4>{title}</h4>
       {presents?.map((present: Present) => {
       return (
-        <ListItem present={present} listType={listType} />
+        <ListItem key={`${present.id}-${listType}`} present={present} listType={listType} />
       )
     })}
     </div>
