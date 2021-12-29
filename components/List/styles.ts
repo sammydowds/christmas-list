@@ -13,6 +13,8 @@ export const container = css`
 `
 
 export const present = css`
+    display: flex;
+    align-items: center;
     margin: 5px 0px;
     padding: 10px;
     border: 2px solid black;
@@ -25,7 +27,10 @@ export const present = css`
 `
 
 export const presentCrossedOff = css`
+    border: 2px solid lightgrey;
+`
+
+export const presentCrossedOffText = css`
     color: grey;
     text-decoration: line-through;
-    border: 2px solid lightgrey;
 `

@@ -1,5 +1,6 @@
 /**@jsxImportSource @emotion/react */
 import * as styles from './styles'
+import Image from 'next/image'
 
 export enum ListType {
   SHOPPING = 'shopping', 
@@ -24,7 +25,9 @@ const ListItem = ({present, onClick, listType}: ListItemProps) => {
   if (listType === ListType.WISHLIST) {
     return (
       <div onClick={onClick} css={[styles.present, present.from && styles.presentCrossedOff]}>
-        {present.description}
+        <span css={present.from && styles.presentCrossedOffText}>{present.description}</span>
+        {present.from && <Image src='/images/sm-santa.svg' height={25} width={25} />}
+        {present.from && <span>({present.from})</span>}
       </div>
     )
   } else if (listType === ListType.SHOPPING) {
