@@ -19,3 +19,16 @@ export const formContainer = css`
     text-align: center;
     padding: 15px;
 `
+
+export const dashboardColContainer = css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+`
+
+export const dashboardContainer = css`
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+`
