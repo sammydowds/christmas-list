@@ -9,11 +9,8 @@ export interface ApiUser {
     password: string
 }
 
-/* PetSchema will correspond to a collection in your MongoDB database. */
 const UserSchema = new mongoose.Schema<ApiUser>({
   username: {
-    /* Name of the user*/
-
     type: String,
     required: [true, 'Please provide a name for this pet.'],
     maxlength: [20, 'Name cannot be more than 60 characters'],
