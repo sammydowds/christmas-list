@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 export interface Family {
     name: string,
-    members: int[],
+    members: number[],
 }
 
 /* PetSchema will correspond to a collection in your MongoDB database. */
