@@ -8,10 +8,10 @@ if (!MONGODB_URI) {
   )
 }
 
-let cached = global.mongoose
+let cached = (global as any).mongoose
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
+  cached = (global as any).mongoose = { conn: null, promise: null }
 }
 
 async function dbConnect() {
@@ -24,7 +24,7 @@ async function dbConnect() {
       bufferCommands: false,
     }
     
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongoose) => {
       return mongoose
     })
   }
