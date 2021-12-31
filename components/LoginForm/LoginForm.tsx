@@ -33,6 +33,7 @@ export const LoginForm = () => {
 	  </FormControl>
 	  <Button type="submit" isLoading={isLoading} isFullWidth size='md' colorScheme="green">Login</Button>
 	  {error && <Box maxW='250px' height='50px'>
+	    {/* // @ts-ignore */}
 	    {error && error?.data?.error}
 	  </Box>}
 	</VStack>
