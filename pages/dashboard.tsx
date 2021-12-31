@@ -3,6 +3,7 @@ import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
 import * as styles from '../styles/styles'
 import { useEffect, useState } from 'react'
+import { VStack } from '@chakra-ui/react'
 
 // resonse that returns everyone but the user logged in
 const presentsByPerson: { [name: string]: Present[] } = {
@@ -143,18 +144,16 @@ const Dashboard = () => {
     // TODO: build in auth logic
     // TODO: rebuild this with Chakra
     return(
-        <div css={styles.dashboardContainer}>
-            <div css={styles.dashboardColContainer}>
-                <AccountInfo hasPresentsToBuy anyPresentsToBuy name={"Cassie"}/>
-                {Object.entries(presentsByPerson).map(([name, presents]) => {
-                    return (
-                        <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
-                    )
-                })}
-                <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={presentList}/>
-                <List listType={ListType.OWN_WISHLIST} title={'Your List'} presents={presentList}/>
-            </div>
-        </div>
+      <VStack>
+	<AccountInfo hasPresentsToBuy anyPresentsToBuy name={"Cassie"}/>
+	{Object.entries(presentsByPerson).map(([name, presents]) => {
+	    return (
+		<List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
+	    )
+	})}
+	<List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={presentList}/>
+	<List listType={ListType.OWN_WISHLIST} title={'Your List'} presents={presentList}/>
+      </VStack>
     )
 }
 

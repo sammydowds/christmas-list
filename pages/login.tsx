@@ -1,22 +1,13 @@
 
 /**@jsxImportSource @emotion/react */
-import { ChristmasLightStrand } from "../components/ChristmasLightStrand"
-import * as styles from "../styles/styles"
-import Image from "next/image"
 import { LoginForm } from "../components/LoginForm"
+import { Heading, Flex } from '@chakra-ui/react'
 
 const Login = () => {
     return(
-        <div css={styles.loginContainer}>
-           <div css={styles.formContainer}>
-                <Image 
-                    src='/images/sm-santa.svg'
-                    height={150}
-                    width={150}
-                />
-                <LoginForm loading/>
-            </div>
-       </div>
+      <Flex direction='column' justify='space-around' align='center' minH='100vh' spacing={10}>
+	<LoginForm loading/>
+      </Flex>
     )
 }
 
