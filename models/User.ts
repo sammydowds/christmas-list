@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt'
 
 export interface User {
     username: string,
-    wishlist: int[],
-    shoppingList: int[],
-    family: int,
+    wishlist: number[],
+    shoppingList: number[],
+    family: number,
     password: string
 }
 
