@@ -1,6 +1,6 @@
-/**@jsxImportSource @emotion/react */
 import { Loading } from '../Loading'
-import * as styles from './styles'
+import { Button, VStack, Input } from '@chakra-ui/react'
+import React, { useState } from 'react'
 
 interface LoginFormProps {
     onSubmit?: () => void
@@ -12,18 +12,17 @@ interface LoginFormProps {
 }
 
 export const LoginForm = ({ loading }: LoginFormProps) => {
-    return (
-        <form css={styles.form}>
-            <label css={styles.label}>
-                Username
-                <input css={styles.input} />
-            </label>
-            <label css={styles.label}>
-                Password
-                <input css={styles.input} />
-            </label>
-            <button css={styles.submitButton}>Enter</button>
-            {loading && <Loading />}
-        </form>
-    )
+  const [formState, setFormState] = useState({ email: '', password: ''})
+  // TODO: add in call to login user 
+  const handleChange = ({
+    target: { name, value },
+    }: React.ChangeEvent<HTMLInputElement>) => 
+      setFormState((prev) => ({...prev, [name]: value }))
+  return (
+      <VStack spacing='20px'>
+	<Input onChange={handleChange} name="email" variant='flushed' focusBorderColor='green.400' size='lg' type='email' placeHolder='Email' /> 
+	<Input onChange={handleChange} name="password" variant='flushed' focusBorderColor='green.400' size='lg' type='password' placeHolder='Enter password' />
+	<Button size='md' colorScheme="green">Login</Button>
+      </VStack>
+  )
 }
