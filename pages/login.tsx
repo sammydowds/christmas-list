@@ -8,10 +8,7 @@ import { LoginForm } from "../components/LoginForm"
 const Login = () => {
     return(
         <div css={styles.loginContainer}>
-            <div css={styles.topLights}>
-                <ChristmasLightStrand />
-            </div>
-            <div css={styles.formContainer}>
+           <div css={styles.formContainer}>
                 <Image 
                     src='/images/sm-santa.svg'
                     height={150}
@@ -19,10 +16,7 @@ const Login = () => {
                 />
                 <LoginForm loading/>
             </div>
-            <div css={styles.bottomLights}>
-                <ChristmasLightStrand invert/>
-            </div>
-        </div>
+       </div>
     )
 }
 

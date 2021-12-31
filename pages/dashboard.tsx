@@ -141,6 +141,7 @@ const presentList: Present[] = [
 const Dashboard = () => {
     // TODO: load data slices with api slice rtk query 
     // TODO: build in auth logic
+    // TODO: rebuild this with Chakra
     return(
         <div css={styles.dashboardContainer}>
             <div css={styles.dashboardColContainer}>
