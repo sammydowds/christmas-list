@@ -12,6 +12,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@reduxjs/toolkit": "^1.7.1",
+    "@types/bcrypt": "^5.0.0",
     "bcrypt": "^5.0.1",
     "framer-motion": "^5",
     "iron-session": "^6.0.4",
