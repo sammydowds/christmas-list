@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
 
-export interface User {
+export interface ApiUser {
     username: string,
     wishlist: number[],
     shoppingList: number[],
@@ -10,7 +10,7 @@ export interface User {
 }
 
 /* PetSchema will correspond to a collection in your MongoDB database. */
-const UserSchema = new mongoose.Schema<User>({
+const UserSchema = new mongoose.Schema<ApiUser>({
   username: {
     /* Name of the user*/
 

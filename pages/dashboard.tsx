@@ -143,14 +143,14 @@ const Dashboard = () => {
     // TODO: rebuild this with Chakra
     return(
       <VStack>
-	<AccountInfo hasPresentsToBuy anyPresentsToBuy name={"Cassie"}/>
-	{Object.entries(presentsByPerson).map(([name, presents]) => {
-	    return (
-		<List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
-	    )
-	})}
-	<List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={presentList}/>
-	<List listType={ListType.OWN_WISHLIST} title={'Your List'} presents={presentList}/>
+        <AccountInfo hasPresentsToBuy anyPresentsToBuy name={"Cassie"}/>
+        {Object.entries(presentsByPerson).map(([name, presents]) => {
+            return (
+            <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
+            )
+        })}
+        <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={presentList}/>
+        <List listType={ListType.OWN_WISHLIST} title={'Your List'} presents={presentList}/>
       </VStack>
     )
 }
