@@ -8,7 +8,7 @@ export const LoginForm = () => {
   const [formState, setFormState] = useState({ email: '', password: ''})
   const [login, { isLoading, error }] = useLoginMutation()
   
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     await login(formState).unwrap().then(() => Router.push('/dashboard'))
   }
