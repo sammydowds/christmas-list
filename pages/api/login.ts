@@ -20,8 +20,8 @@ export default withIronSessionApiRoute(
 	const user = await User.findOne({name: username})
 	if (user && user.comparePasswords(password)) {
 	  // create a session 
-	  request.session.user = user
-	  await request.session.save()
+	  req.session.user = user
+	  await req.session.save()
 	  res.status(200).json(user)
 	}
 	res.status(400).json({error: 'Uh oh. Our elves had trouble validating your credentials!'})
