@@ -34,3 +34,15 @@ export const presentCrossedOffText = css`
     color: grey;
     text-decoration: line-through;
 `
+
+export const yourPresent = css`
+    display: flex;
+    align-items: center;
+    margin: 5px 0px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 90%;
+    background: white;
+`

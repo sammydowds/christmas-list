@@ -2,7 +2,9 @@
 import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
 import * as styles from '../styles/styles'
+import { useEffect, useState } from 'react'
 
+// resonse that returns everyone but the user logged in
 const presentsByPerson: { [name: string]: Present[] } = {
     "Kate": [
         {
@@ -68,6 +70,8 @@ const presentsByPerson: { [name: string]: Present[] } = {
     ],
 }
 
+// a response that returns presents that you want
+// a response that returns presents that are "from" you (shopping list)
 const presentList: Present[] = [
     {
         description: 'New Shiny Truck', 
@@ -135,6 +139,8 @@ const presentList: Present[] = [
 ]
 
 const Dashboard = () => {
+    // TODO: load data slices with api slice rtk query 
+    // TODO: build in auth logic
     return(
         <div css={styles.dashboardContainer}>
             <div css={styles.dashboardColContainer}>
@@ -145,6 +151,7 @@ const Dashboard = () => {
                     )
                 })}
                 <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={presentList}/>
+                <List listType={ListType.OWN_WISHLIST} title={'Your List'} presents={presentList}/>
             </div>
         </div>
     )

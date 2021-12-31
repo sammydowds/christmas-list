@@ -19,12 +19,13 @@ export interface Present {
 interface ListItemProps {
   present: Present,
   listType: ListType
-  onClick?: () => void
 }
-const ListItem = ({present, onClick, listType}: ListItemProps) => {
+const ListItem = ({present, listType}: ListItemProps) => {
+  // set state here as the present? each item manages present state
+  // TODO: implement delete present, update present, and click present
   if (listType === ListType.WISHLIST) {
     return (
-      <div onClick={onClick} css={[styles.present, present.from && styles.presentCrossedOff]}>
+      <div css={[styles.present, present.from && styles.presentCrossedOff]}>
         <span css={present.from && styles.presentCrossedOffText}>{present.description}</span>
         {present.from && <Image src='/images/sm-santa.svg' height={25} width={25} />}
         {present.from && <span>({present.from})</span>}
@@ -32,18 +33,15 @@ const ListItem = ({present, onClick, listType}: ListItemProps) => {
     )
   } else if (listType === ListType.SHOPPING) {
     return (
-      <div onClick={onClick} css={[styles.present, present.isBought && styles.presentCrossedOff]}>
+      <div css={[styles.present, present.isBought && styles.presentCrossedOff]}>
         {present.description}
         {present.to && <span> - {present.to}</span>}
       </div>
     )
   } else if (listType === ListType.OWN_WISHLIST) {
     return (
-      <div onClick={onClick}>
-        {present.description}
-        {present.to && <span> - {present.to}</span>}
-      </div>
-    )
+      <input css={styles.yourPresent} value={present.description} />
+   )
   }
   return <div></div>
 }
