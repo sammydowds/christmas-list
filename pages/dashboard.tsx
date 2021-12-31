@@ -1,8 +1,6 @@
 /**@jsxImportSource @emotion/react */
 import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
-import * as styles from '../styles/styles'
-import { useEffect, useState } from 'react'
 import { VStack } from '@chakra-ui/react'
 
 // resonse that returns everyone but the user logged in
