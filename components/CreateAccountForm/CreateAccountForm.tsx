@@ -33,6 +33,10 @@ export const CreateAccountForm = () => {
 	    <FormLabel htmlFor='password'>Password</FormLabel>
 	    <Input onChange={handleChange} name="password" variant='flushed' focusBorderColor='green.400' size='lg' type='password' placeholder='Enter password' />
 	  </FormControl>
+	  <FormControl isRequired>
+	    <FormLabel htmlFor='passcode'>Family passcode</FormLabel>
+	    <Input onChange={handleChange} name="passcode" variant='flushed' focusBorderColor='green.400' size='lg' type='text' placeholder='Enter family passcode' />
+	  </FormControl>
 	  <Button type="submit" isLoading={isLoading} isFullWidth size='md' colorScheme="green">Create Account</Button>
 	  {error && <Box maxW='250px' height='50px'>
 	    {/*

@@ -1,18 +1,21 @@
 import mongoose from 'mongoose'
 
 export interface Family {
-    name: string,
-    members: number[],
+    passcode: string,
+    members?: mongoose.Schema.Types.ObjectId[]
 }
 
 const FamilySchema = new mongoose.Schema<Family>({
-  name: {
+  passcode: {
     type: String,
-    required: [true, 'Please provide a name for this pet.'],
-    maxlength: [20, 'Name cannot be more than 60 characters'],
+    required: [true, 'Please provide a passcode for the family.'],
+    minlength: [20, 'Passcode must be greater than 20 characters.'],
   },
   members: {
-    type: [Number]
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }]
   }
 })
 

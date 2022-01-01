@@ -2,8 +2,8 @@ import mongoose from 'mongoose'
 
 export interface Present {
     description: string,
-    to: string,
-    from: string,
+    to: mongoose.Schema.Types.ObjectId,
+    from: mongoose.Schema.Types.ObjectId,
     isBought: boolean
 }
 
@@ -14,12 +14,12 @@ const PresentSchema = new mongoose.Schema<Present>({
     maxlength: [20, 'Name cannot be more than 60 characters'],
   },
   to: {
-    type: String,
-    maxlength: [20, 'Name cannot be more than 60 characters'],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   from: {
-    type: String,
-    maxlength: [20, 'Name cannot be more than 60 characters'],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   isBought: {
     type: Boolean,

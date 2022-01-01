@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt'
 
 export interface IUser extends Document {
     email: string,
-    wishlist?: number[],
-    shoppingList?: number[],
-    family?: number,
+    wishlist?: mongoose.Schema.Types.ObjectId[],
+    shoppingList?: mongoose.Schema.Types.ObjectId[],
+    family?: mongoose.Schema.Types.ObjectId,
     password: string,
     comparePasswords(candidatePassword: string, cb: (err: Error | null, isMatch: boolean | null) => void): void;
 }
@@ -16,14 +16,19 @@ const UserSchema = new Schema<IUser>({
     required: [true, 'Please provide a name for this pet.'],
     maxlength: [20, 'Name cannot be more than 60 characters'],
   },
-  wishlist: {
-    type: [Number]
-  },
-  shoppingList: {
-    type: [Number]
-  },
+  wishlist: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Present"
+    }
+  ],
+  shoppingList: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Present"
+  }
+],
   family: {
-    type: Number
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Family"
   },
   password: {
     type: String,
