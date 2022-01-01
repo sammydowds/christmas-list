@@ -1,6 +1,9 @@
 import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
-import { VStack } from '@chakra-ui/react'
+import { VStack, Button } from '@chakra-ui/react'
+import { useGetUserQuery, useLogoutMutation } from "../redux/services/christmasList"
+import { useEffect } from "react"
+import Router from "next/router"
 
 // resonse that returns everyone but the user logged in
 const presentsByPerson: { [name: string]: Present[] } = {
@@ -137,12 +140,28 @@ const presentList: Present[] = [
 ]
 
 const Dashboard = () => {
+    const { data: user = {}, isLoading, error } = useGetUserQuery()
+    const [ logout ] = useLogoutMutation()
+
+    useEffect(() => {
+        if (!user?.email && !isLoading) {
+            Router.push('/login')
+        }
+    }, [user, isLoading])
+
+    const handleLogout = async () => {
+        await logout()
+        Router.push('/login')
+    }
+
+    const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) &&  user.shoppingList.length > 0
     // TODO: load data slices with api slice rtk query 
     // TODO: build in auth logic
     // TODO: rebuild this with Chakra
     return(
       <VStack>
-        <AccountInfo hasPresentsToBuy anyPresentsToBuy name={"Cassie"}/>
+        <AccountInfo isImpish={isImpish} email={user.email}/>
+        <Button onClick={handleLogout} size='md' isFullWidth>Logout</Button>
         {Object.entries(presentsByPerson).map(([name, presents]) => {
             return (
             <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />

@@ -33,9 +33,6 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
       req.session.user = newUser
       await req.session.save()
       res.status(200).json(newUser)
-      // Save User instance
-      // add user iron session and save
-      // send success response with user 
       break
   }
 }

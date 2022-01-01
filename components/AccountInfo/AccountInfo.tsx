@@ -37,11 +37,10 @@ const AdmirableStatus = () => {
 }
 
 interface AccountInfoProps {
-  hasPresentsToBuy: boolean
-  anyPresentsToBuy: boolean
-  name: string
+  isImpish?: boolean
+  email: string
 }
-export const AccountInfo = ({ hasPresentsToBuy, anyPresentsToBuy, name }: AccountInfoProps) => {
+export const AccountInfo = ({ isImpish, email }: AccountInfoProps) => {
   return(
     <div css={styles.container}>
       <div css={styles.connectionStatus}>
@@ -49,10 +48,10 @@ export const AccountInfo = ({ hasPresentsToBuy, anyPresentsToBuy, name }: Accoun
         <Image src={'/images/check-circle.svg'} height={20} width={20} />
       </div>
       <div>
-        Logged in as: {name}
+        Logged in as: {email}
       </div>
       <div>
-        {(hasPresentsToBuy || anyPresentsToBuy) ? <ImpishStatus /> : <AdmirableStatus />}
+        {isImpish ? <ImpishStatus /> : <AdmirableStatus />}
       </div>
     </div>
   )

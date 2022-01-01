@@ -23,6 +23,7 @@ interface ListItemProps {
 const ListItem = ({present, listType}: ListItemProps) => {
   // set state here as the present? each item manages present state
   // TODO: implement delete present, update present, and click present
+  const onChange = () => console.log('Some change')
   if (listType === ListType.WISHLIST) {
     return (
       <div css={[styles.present, present.from && styles.presentCrossedOff]}>
@@ -40,7 +41,7 @@ const ListItem = ({present, listType}: ListItemProps) => {
     )
   } else if (listType === ListType.OWN_WISHLIST) {
     return (
-      <input css={styles.yourPresent} value={present.description} />
+      <input css={styles.yourPresent} value={present.description} onChange={onChange}/>
    )
   }
   return <div></div>

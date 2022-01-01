@@ -21,9 +21,18 @@ export const christmasListApi = createApi({
         body: credentials,
       }),
     }),
+    logout: builder.mutation<any, void>({
+      query: () => ({
+        url: 'logout',
+        method: 'POST',
+      }),
+    }),
+    getUser: builder.query<any, void>({
+      query: () => 'user'
+    }),
     createAccount: builder.mutation<string, LoginRequest>({
       query: (credentials) => ({
-        url: 'users',
+        url: 'user',
         method: 'POST',
         body: credentials,
       }),
@@ -32,4 +41,4 @@ export const christmasListApi = createApi({
 }
 )
 
-export const { useLoginMutation, useCreateAccountMutation } = christmasListApi
+export const { useLoginMutation, useLogoutMutation, useGetUserQuery, useCreateAccountMutation } = christmasListApi

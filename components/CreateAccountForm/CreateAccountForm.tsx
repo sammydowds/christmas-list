@@ -4,6 +4,7 @@ import Router from 'next/router'
 import { useCreateAccountMutation } from '../../redux/services/christmasList'
 import Image from 'next/image'
 
+// TODO: create second password field to make sure they match
 export const CreateAccountForm = () => {
   const [formState, setFormState] = useState({ email: '', password: ''})
   const [createAccount, { isLoading, error }] = useCreateAccountMutation()
