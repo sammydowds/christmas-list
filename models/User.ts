@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt'
 
 export interface IUser extends Document {
     email: string,
-    wishlist: number[],
-    shoppingList: number[],
-    family: number,
+    wishlist?: number[],
+    shoppingList?: number[],
+    family?: number,
     password: string,
     comparePasswords(candidatePassword: string, cb: (err: Error | null, isMatch: boolean | null) => void): void;
 }

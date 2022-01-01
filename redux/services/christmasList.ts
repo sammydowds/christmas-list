@@ -4,6 +4,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 const prodUrl = 'https://christmas-list-woad.vercel.app/api/'
 const baseUrl = process.env.NODE_ENV === 'production' ? prodUrl : 'http://localhost:3000/api/'
 
+// TODO: re-factor types for users/login/create account
 interface LoginRequest {
   email: string,
   password: string
@@ -20,8 +21,15 @@ export const christmasListApi = createApi({
         body: credentials,
       }),
     }),
+    createAccount: builder.mutation<string, LoginRequest>({
+      query: (credentials) => ({
+        url: 'users',
+        method: 'POST',
+        body: credentials,
+      }),
+    }),
   })
 }
 )
 
-export const { useLoginMutation } = christmasListApi
+export const { useLoginMutation, useCreateAccountMutation } = christmasListApi
