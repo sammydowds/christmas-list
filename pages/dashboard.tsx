@@ -1,4 +1,3 @@
-/**@jsxImportSource @emotion/react */
 import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
 import { VStack } from '@chakra-ui/react'
