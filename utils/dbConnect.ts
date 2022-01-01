@@ -1,35 +1,18 @@
+/* This is a database connection function*/
 import mongoose from 'mongoose'
 
-const MONGODB_URI = process.env.MONGODB_URI
+const connection: any = {} /* creating connection object*/
 
-if (!MONGODB_URI) {
-  throw new Error(
-    'Please add a mongo db connection URI to env vars'
-  )
-}
-
-let cached = (global as any).mongoose
-
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null }
-}
-
-async function dbConnect() {
-  if (cached.conn) {
-    return cached.conn
+async function dbConnect(): Promise<void> {
+  /* check if we have connection to our databse*/
+  if (connection.isConnected) {
+    return
   }
 
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    }
-    
-    cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongoose) => {
-      return mongoose
-    })
-  }
-  cached.conn = await cached.promise
-  return cached.conn
+  /* connecting to our database */
+  const db = await mongoose.connect(process.env.MONGODB_URI as string, {})
+
+  connection.isConnected = db.connections[0].readyState
 }
 
 export default dbConnect
