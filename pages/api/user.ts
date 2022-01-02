@@ -51,11 +51,11 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
             await newUser.save()
             family.members.push(newUser._id.toString())
             await family.save()
+            await newUser.populate('family')
             req.session.user = newUser
             await req.session.save()
             res.status(200).json(newUser)
           }
-
           res.status(400).json({ error: 'Family not found!'})
         })
         break
@@ -71,6 +71,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         await newUser.save()
         family.members = [newUser._id.toString()]
         await family.save()
+        await newUser.populate('family')
         req.session.user = newUser
         await req.session.save()
         res.status(200).json(newUser)
