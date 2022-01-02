@@ -1,12 +1,16 @@
 import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
-import { VStack, Button } from '@chakra-ui/react'
+import { VStack, Flex, Text, Heading } from '@chakra-ui/react'
 import { useGetUserQuery, useLogoutMutation } from "../redux/services/christmasList"
 import { useEffect } from "react"
 import Router from "next/router"
 
+interface PresentsByPerson {
+    [name: string]: Present[]
+}
+
 // resonse that returns everyone but the user logged in
-const presentsByPerson: { [name: string]: Present[] } = {
+const presentsByPerson: PresentsByPerson = {
     "Kate": [
         {
             description: 'New Iphone',
@@ -139,9 +143,39 @@ const presentList: Present[] = [
     }
 ]
 
+const EmptyOtherWishlists = () => {
+    return (
+        <Flex p='20px' direction='column' justify='center' align='center' borderWidth='2px' borderRadius='10px'>
+            <Heading as='h4' size='md'>No Members To Shop For!</Heading>
+            <Text noOfLines={4}>Please add members to your Family!</Text>
+        </Flex>
+    )
+}
+interface OtherWishlists {
+    presentsByPerson: PresentsByPerson
+}
+const OtherWishlists = ({ presentsByPerson }: OtherWishlists) => {
+    if (Object.keys(presentsByPerson).length) {
+        return (
+            <>
+                {Object.entries(presentsByPerson).map(([name, presents]) => {
+                    return (
+                    <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
+                    )
+                })}
+            </>
+        )
+    }
+    return <EmptyOtherWishlists />
+}
+
+
 const Dashboard = () => {
     const { data: user = {}, isFetching, error } = useGetUserQuery()
     const [ logout ] = useLogoutMutation()
+    const othersWishlists = {} // TODO: select this from Redux
+    const ownWishlist: Present[] = [] // TODO: off of user
+    const ownShoppingList: Present[] = [] // TODO: off of user
 
     useEffect(() => {
         if (!user?.email && !isFetching) {
@@ -158,15 +192,11 @@ const Dashboard = () => {
 
     const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) &&  user.shoppingList.length > 0
     return(
-      <VStack>
+      <VStack my='20px'>
         <AccountInfo isImpish={isImpish} email={user?.email} passcode={user?.family?.passcode} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
-        {Object.entries(presentsByPerson).map(([name, presents]) => {
-            return (
-            <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
-            )
-        })}
-        <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={presentList}/>
-        <List listType={ListType.OWN_WISHLIST} title={'Your List'} presents={presentList}/>
+        <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={ownShoppingList}/>
+        <List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={ownWishlist}/>
+        <OtherWishlists presentsByPerson={othersWishlists} />
       </VStack>
     )
 }

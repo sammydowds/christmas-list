@@ -1,4 +1,4 @@
-import { Box, Button, VStack, FormLabel, FormControl, Input } from '@chakra-ui/react'
+import { Box, Button, VStack, FormLabel, FormControl, Input, Heading } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import Router from 'next/router'
 import { useLoginMutation } from '../../redux/services/christmasList'
@@ -23,7 +23,7 @@ export const LoginForm = () => {
       <form onSubmit={handleSubmit}>
 		<VStack minW='300px' spacing='20px'>
 		<Image src='/images/sm-santa.svg' height={75} width={75} />
-		<h4>Please log in</h4>
+		<Heading as='h4' size='sm'>Please log in!</Heading>
 		<FormControl isRequired>
 			<FormLabel htmlFor='email'>Email</FormLabel>
 			<Input onChange={handleChange} name="email" variant='flushed' focusBorderColor='green.400' size='lg' type='email' placeholder='Email' /> 

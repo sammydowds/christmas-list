@@ -1,4 +1,4 @@
-import { Box, Button, VStack, FormLabel, FormControl, Input } from '@chakra-ui/react'
+import { Box, Button, VStack, FormLabel, FormControl, Input, Heading } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import Router from 'next/router'
 import { useCreateAccountMutation } from '../../redux/services/christmasList'
@@ -25,7 +25,7 @@ export const CreateAccountForm = () => {
       <form onSubmit={handleSubmit}>
 	<VStack minW='300px' spacing='20px'>
 	  <Image src='/images/sm-santa.svg' height={75} width={75} />
-	  <h4>Join Your Family!</h4>
+	  <Heading as='h4' size='sm'>Create an Account and Join Family!</Heading>
 	  <FormControl isRequired>
 	    <FormLabel htmlFor='email'>Email</FormLabel>
 	    <Input onChange={handleChange} name="email" variant='flushed' focusBorderColor='green.400' size='lg' type='email' placeholder='Email' /> 
@@ -38,7 +38,7 @@ export const CreateAccountForm = () => {
 	    <FormLabel htmlFor='passcode'>Enter the Family Passcode</FormLabel>
 	    <Input onChange={handleChange} name="passcode" variant='flushed' focusBorderColor='green.400' size='lg' type='text' placeholder='Enter family passcode' />
 	  </FormControl>
-	  <Button type="submit" isLoading={isLoading} isFullWidth size='md' colorScheme="green">Create Account</Button>
+	  <Button type="submit" isLoading={isLoading} isFullWidth size='md' colorScheme="green">Create Account And Join Family</Button>
 	  {error && <Box maxW='250px' height='50px'>
 	    {/*
 	    // @ts-ignore */}

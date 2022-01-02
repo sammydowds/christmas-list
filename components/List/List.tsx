@@ -92,6 +92,31 @@ const ListItem = ({present, listType}: ListItemProps) => {
   return <div></div>
 }
 
+const EmptyList = () => {
+  return (
+    <Flex w='100%' p='20px' direction='column' justify='center' align='center' borderWidth='2px' borderRadius='10px'>
+        <Text>No Items</Text>
+    </Flex>
+  )
+}
+
+interface ListItemsProps {
+  presents: Present[],
+  listType: ListType,
+}
+const ListItems = ({ presents, listType}: ListItemsProps) => {
+  return (
+    <>
+      {presents?.map((present: Present) => {
+        return (
+            <ListItem key={`${present.id}-${listType}`} present={present} listType={listType} />
+          )
+        })
+      }
+    </>
+  )
+}
+
 export interface ListProps {
   presents?: Present[]
   title?: string
@@ -103,13 +128,8 @@ export const List = ({ presents, title, listType }: ListProps) => {
   return (
     <Box pt='15px' pb='25px' px='20px' minW='300px' bgColor='#E0C9A625' borderRadius={10} textAlign='center'>
       <VStack spacing='10px'>
-        <Heading as='h4' size='md' >{title}</Heading>
-        {presents?.map((present: Present) => {
-          return (
-              <ListItem key={`${present.id}-${listType}`} present={present} listType={listType} />
-            )
-          })
-        }
+        <Heading as='h4' size='m' >{title}</Heading>
+        {presents?.length ? <ListItems presents={presents} listType={listType} /> : <EmptyList />}
       </VStack>
     </Box>
   )
