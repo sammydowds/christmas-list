@@ -1,7 +1,6 @@
-/**@jsxImportSource @emotion/react */
-import * as styles from './styles'
 import Image from 'next/image'
-import { Box, VStack, Heading, Flex, Badge, Text } from '@chakra-ui/react'
+import { Box, VStack, Heading, Flex, Badge, Text, Editable, EditableInput, EditablePreview, useEditableControls, ButtonGroup, IconButton } from '@chakra-ui/react'
+import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons'
 
 export enum ListType {
   SHOPPING = 'shopping', 
@@ -15,6 +14,48 @@ export interface Present {
   from: string | null
   isBought: boolean
   id: string
+}
+
+export interface EditablePresentProps {
+  present: Present
+}
+
+const EditablePresent = ({ present }: EditablePresentProps) => {
+  function EditableControls() {
+    const {
+      isEditing,
+      getSubmitButtonProps,
+      getCancelButtonProps,
+      getEditButtonProps,
+    } = useEditableControls()
+
+    return isEditing ? (
+      <ButtonGroup ml='5px' justifyContent='center' size='sm'>
+        <IconButton aria-label='confirm change' icon={<CheckIcon />} {...getSubmitButtonProps()} />
+        <IconButton aria-label='cancel change' icon={<CloseIcon />} {...getCancelButtonProps()} />
+      </ButtonGroup>
+    ) : (
+      <Flex ml='5px' justifyContent='center'>
+        <IconButton aria-label='edit present' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
+      </Flex>
+    )
+  }
+  return(
+    <Editable 
+        w='100%'
+        h='35px'
+        display='flex'
+        justifyContent='center'
+        borderBottom='1px'
+        textAlign='center'
+        defaultValue={present.description}
+        isPreviewFocusable={false}
+      >
+      <EditablePreview />
+      <EditableInput />
+      <EditableControls />
+    </Editable>
+  )
 }
 
 interface ListItemProps {
@@ -46,9 +87,7 @@ const ListItem = ({present, listType}: ListItemProps) => {
       </Flex>
     )
   } else if (listType === ListType.OWN_WISHLIST) {
-    return (
-      <input css={styles.yourPresent} value={present.description} onChange={onChange}/>
-   )
+    return <EditablePresent present={present} />
   }
   return <div></div>
 }
