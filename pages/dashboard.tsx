@@ -162,7 +162,7 @@ const Dashboard = () => {
     // TODO: rebuild this with Chakra
     return(
       <VStack>
-        <AccountInfo isImpish={isImpish} email={user.email} familyPasscode={user.family.passcode} />
+        <AccountInfo isImpish={isImpish} email={user?.email} familyPasscode={user?.family} />
         <Button onClick={handleLogout} size='md'>Logout</Button>
         {Object.entries(presentsByPerson).map(([name, presents]) => {
             return (
