@@ -146,6 +146,8 @@ const Dashboard = () => {
     useEffect(() => {
         if (!user?.email && !isLoading) {
             Router.push('/login')
+        } else {
+            // FETCH others wishlists in family 
         }
     }, [user, isLoading])
 
@@ -160,8 +162,8 @@ const Dashboard = () => {
     // TODO: rebuild this with Chakra
     return(
       <VStack>
-        <AccountInfo isImpish={isImpish} email={user.email}/>
-        <Button onClick={handleLogout} size='md' isFullWidth>Logout</Button>
+        <AccountInfo isImpish={isImpish} email={user.email} familyPasscode={user.family.passcode} />
+        <Button onClick={handleLogout} size='md'>Logout</Button>
         {Object.entries(presentsByPerson).map(([name, presents]) => {
             return (
             <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />

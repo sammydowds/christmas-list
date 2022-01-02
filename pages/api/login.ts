@@ -21,7 +21,7 @@ async function loginRoute(
         } else if (!user) {
           res.status(400).json({ error: 'Uh oh. Our elves found that your credentials were incorrect.'})
         } else {
-          user.comparePasswords(password, async (matchError, isMatch) => {
+          user.comparePasswords(password, async (matchError: any, isMatch: boolean) => {
             if (matchError) {
               res.status(400).json({ error: 'Uh oh. Something went wrong while checking your credentials.'})
             } else if (!isMatch) {
@@ -29,6 +29,7 @@ async function loginRoute(
             } else {
               // start a session
               req.session.user = user
+              await user.populate('family')
               await req.session.save()
               res.status(200).json(user)
             }

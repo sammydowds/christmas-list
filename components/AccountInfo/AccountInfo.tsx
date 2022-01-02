@@ -39,8 +39,9 @@ const AdmirableStatus = () => {
 interface AccountInfoProps {
   isImpish?: boolean
   email: string
+  familyPasscode: string
 }
-export const AccountInfo = ({ isImpish, email }: AccountInfoProps) => {
+export const AccountInfo = ({ isImpish, email, familyPasscode }: AccountInfoProps) => {
   return(
     <div css={styles.container}>
       <div css={styles.connectionStatus}>
@@ -49,6 +50,9 @@ export const AccountInfo = ({ isImpish, email }: AccountInfoProps) => {
       </div>
       <div>
         Logged in as: {email}
+      </div>
+      <div>
+        Family passcode: {familyPasscode}
       </div>
       <div>
         {isImpish ? <ImpishStatus /> : <AdmirableStatus />}
