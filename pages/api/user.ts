@@ -1,9 +1,9 @@
 import { withIronSessionApiRoute } from "iron-session/next";
 import { ironOptions } from "../../utils/ironOptions";
 import { NextApiRequest, NextApiResponse } from "next";
+import Family from "../../models/Family";
 import User from "../../models/User";
 import dbConnect from "../../utils/dbConnect";
-import Family from "../../models/Family";
 
 // TODO: type the User here
 

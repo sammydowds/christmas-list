@@ -140,16 +140,16 @@ const presentList: Present[] = [
 ]
 
 const Dashboard = () => {
-    const { data: user = {}, isLoading, error } = useGetUserQuery()
+    const { data: user = {}, isFetching, error } = useGetUserQuery()
     const [ logout ] = useLogoutMutation()
 
     useEffect(() => {
-        if (!user?.email && !isLoading) {
+        if (!user?.email && !isFetching) {
             Router.push('/login')
         } else {
             // FETCH others wishlists in family 
         }
-    }, [user, isLoading])
+    }, [user, isFetching])
 
     const handleLogout = async () => {
         await logout()

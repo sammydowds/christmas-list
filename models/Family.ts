@@ -19,4 +19,4 @@ const FamilySchema = new mongoose.Schema<Family>({
   }
 })
 
-export default mongoose.models.Family|| mongoose.model('Family', FamilySchema)
+export default mongoose.models.Family || mongoose.model('Family', FamilySchema)
