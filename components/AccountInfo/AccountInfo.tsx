@@ -1,62 +1,86 @@
-/**@jsxImportSource @emotion/react */
-import * as styles from './styles'
 import Image from 'next/image'
+import { Box, VStack, Text, Input, Flex, Circle, Heading, ButtonGroup, Button, useClipboard } from '@chakra-ui/react'
+import React from 'react'
 
 const ImpishStatus = () => {
   return(
-    <div css={styles.status}>
-      Status:&nbsp;
-      <span css={styles.impishText}>
-        IMPISH
-        <Image 
-          src='/images/impish.svg'
-          height={20}
-          width={20}
-        />
-      </span>
-    </div>
-    
+    <Text color='red'>
+    IMPISH
+    <Image 
+      src='/images/impish.svg'
+      height={20}
+      width={20}
+    />
+    </Text>
   )
 }
 
 const AdmirableStatus = () => {
   return(
-    <div css={styles.status}>
-      Status:&nbsp;
-      <span css={styles.admirableText}>
-        ADMIREABLE
-        <Image 
-          src='/images/sm-santa.svg'
-          height={20}
-          width={20}
-        />
-      </span>
-    </div>
-    
+    <Text textAlign='center' color='green'>
+      ADMIREABLE
+      <Image 
+        src='/images/sm-santa.svg'
+        height={20}
+        width={20}
+      />
+    </Text>
   )
 }
 
-interface AccountInfoProps {
-  isImpish?: boolean
+interface ProfileProps {
   email: string
-  familyPasscode: string
+  isImpish?: boolean
+  onClickDeleteAccount?: () => void
+  onClickLogout?: () => void
 }
-export const AccountInfo = ({ isImpish, email, familyPasscode }: AccountInfoProps) => {
+const Profile = ({ email, isImpish, onClickDeleteAccount, onClickLogout }: ProfileProps) => {
+  return (
+    <Box borderWidth='2px' p='10px' borderRadius='10px'>
+      <Flex display='column'>
+        <Heading as='h4' size='sm'>Profile</Heading>
+        <Text>Email: {email}</Text>
+        <Text display='flex'>Status:&nbsp; {isImpish ? <ImpishStatus /> : <AdmirableStatus />}</Text>
+        <ButtonGroup mt='5px'>
+          <Button onClick={onClickDeleteAccount} colorScheme='red'>Delete Account</Button>
+          <Button onClick={onClickLogout} colorScheme='blue'>Logout</Button>
+        </ButtonGroup>
+      </Flex>
+    </Box>
+  )
+}
+
+interface FamilyProps {
+  passcode: string
+}
+const Family = ({ passcode }: FamilyProps) => {
+  const { hasCopied, onCopy } = useClipboard(passcode)
+  return (
+    <Box borderWidth='2px' p='10px' borderRadius='10px'>
+      <Flex display='column'>
+        <Heading as='h4' size='sm'>Family</Heading>
+        <Text noOfLines={3} fontSize='10px'>Share this code with family members. They will enter this code when they sign up to join the family!</Text>
+        <Flex mt='5px'>
+          <Input isReadOnly value={passcode} />
+          <Button onClick={onCopy} ml={2}>
+            {hasCopied ? 'Copied' : 'Copy'}
+          </Button>
+        </Flex>
+      </Flex>
+    </Box>
+  )
+}
+
+interface AccountInfoProps extends ProfileProps, FamilyProps {}
+
+export const AccountInfo = ({ isImpish, email, passcode, onClickDeleteAccount, onClickLogout }: AccountInfoProps) => {
   return(
-    <div css={styles.container}>
-      <div css={styles.connectionStatus}>
-        Connected to Northpole Servers:&nbsp; 
-        <Image src={'/images/check-circle.svg'} height={20} width={20} />
-      </div>
-      <div>
-        Logged in as: {email}
-      </div>
-      <div>
-        Family passcode: {familyPasscode}
-      </div>
-      <div>
-        {isImpish ? <ImpishStatus /> : <AdmirableStatus />}
-      </div>
-    </div>
+    <Box maxW='300px'>
+      <VStack>
+        <Text as='i' color='grey' display='flex'>Connected to Northpole Servers:&nbsp; <Image src={'/images/check-circle.svg'} height={20} width={20} /></Text>
+        <Profile onClickLogout={onClickLogout} onClickDeleteAccount={onClickDeleteAccount} email={email} isImpish={isImpish} />
+        <Family passcode={passcode} />
+      </VStack>
+    </Box>
   )
 }

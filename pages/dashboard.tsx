@@ -159,8 +159,7 @@ const Dashboard = () => {
     const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) &&  user.shoppingList.length > 0
     return(
       <VStack>
-        <AccountInfo isImpish={isImpish} email={user?.email} familyPasscode={user?.family?.passcode} />
-        <Button onClick={handleLogout} size='md'>Logout</Button>
+        <AccountInfo isImpish={isImpish} email={user?.email} passcode={user?.family?.passcode} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
         {Object.entries(presentsByPerson).map(([name, presents]) => {
             return (
             <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
