@@ -159,7 +159,7 @@ const Dashboard = () => {
     const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) &&  user.shoppingList.length > 0
     return(
       <VStack>
-        <AccountInfo isImpish={isImpish} email={user?.email} familyPasscode={user?.family} />
+        <AccountInfo isImpish={isImpish} email={user?.email} familyPasscode={user?.family?.passcode} />
         <Button onClick={handleLogout} size='md'>Logout</Button>
         {Object.entries(presentsByPerson).map(([name, presents]) => {
             return (
