@@ -157,9 +157,6 @@ const Dashboard = () => {
     }
 
     const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) &&  user.shoppingList.length > 0
-    // TODO: load data slices with api slice rtk query 
-    // TODO: build in auth logic
-    // TODO: rebuild this with Chakra
     return(
       <VStack>
         <AccountInfo isImpish={isImpish} email={user?.email} familyPasscode={user?.family} />
