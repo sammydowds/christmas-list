@@ -17,7 +17,7 @@ export interface Present {
 }
 
 export interface EditablePresentProps {
-  present: Present
+  present?: Present
 }
 
 const EditablePresent = ({ present }: EditablePresentProps) => {
@@ -37,7 +37,7 @@ const EditablePresent = ({ present }: EditablePresentProps) => {
     ) : (
       <Flex ml='5px'>
         <IconButton mr='10px' aria-label='edit present' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
-        <IconButton aria-label='delete present' size='sm' icon={<DeleteIcon />} />
+        {present && <IconButton aria-label='delete present' size='sm' icon={<DeleteIcon />} />}
       </Flex>
     )
   }
@@ -49,8 +49,8 @@ const EditablePresent = ({ present }: EditablePresentProps) => {
         justifyContent='space-between'
         borderBottom='1px'
         textAlign='center'
-        defaultValue={present.description}
-        isPreviewFocusable={false}
+        defaultValue={present? present?.description : 'Add a present...'}
+        isPreviewFocusable={ present ? false : true}
       >
       <EditablePreview />
       <EditableInput />
@@ -95,7 +95,7 @@ const ListItem = ({present, listType}: ListItemProps) => {
 const EmptyList = () => {
   return (
     <Flex w='100%' p='20px' direction='column' justify='center' align='center' borderWidth='2px' borderRadius='10px'>
-        <Text>No Items</Text>
+        <Text>No Presents</Text>
     </Flex>
   )
 }
@@ -124,12 +124,13 @@ export interface ListProps {
   listType: ListType
 }
 export const List = ({ presents, title, listType }: ListProps) => {
-  // TODO: add empty state and loading state
+  // TODO: add cbs for deleting, editing, and creating presents
   return (
     <Box pt='15px' pb='25px' px='20px' minW='300px' bgColor='#E0C9A625' borderRadius={10} textAlign='center'>
       <VStack spacing='10px'>
         <Heading as='h4' size='m' >{title}</Heading>
         {presents?.length ? <ListItems presents={presents} listType={listType} /> : <EmptyList />}
+        {listType === ListType.OWN_WISHLIST && <EditablePresent /> }
       </VStack>
     </Box>
   )
