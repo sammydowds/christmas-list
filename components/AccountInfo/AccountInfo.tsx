@@ -18,7 +18,7 @@ const ImpishStatus = () => {
 const AdmirableStatus = () => {
   return(
     <Text textAlign='center' color='green'>
-      ADMIREABLE
+      ADMIRABLE
       <Image 
         src='/images/sm-santa.svg'
         height={20}
