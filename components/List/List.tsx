@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { Box, VStack, Heading, Flex, Badge, Text, Editable, EditableInput, EditablePreview, useEditableControls, ButtonGroup, IconButton } from '@chakra-ui/react'
-import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons'
+import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons'
 
 export enum ListType {
   SHOPPING = 'shopping', 
@@ -30,13 +30,14 @@ const EditablePresent = ({ present }: EditablePresentProps) => {
     } = useEditableControls()
 
     return isEditing ? (
-      <ButtonGroup ml='5px' justifyContent='center' size='sm'>
-        <IconButton aria-label='confirm change' icon={<CheckIcon />} {...getSubmitButtonProps()} />
-        <IconButton aria-label='cancel change' icon={<CloseIcon />} {...getCancelButtonProps()} />
+      <ButtonGroup ml='5px' size='sm'>
+        <IconButton colorScheme='green' aria-label='confirm change' icon={<CheckIcon />} {...getSubmitButtonProps()} />
+        <IconButton colorScheme='red' aria-label='cancel change' icon={<CloseIcon />} {...getCancelButtonProps()} />
       </ButtonGroup>
     ) : (
-      <Flex ml='5px' justifyContent='center'>
-        <IconButton aria-label='edit present' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
+      <Flex ml='5px'>
+        <IconButton mr='10px' aria-label='edit present' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
+        <IconButton aria-label='delete present' size='sm' icon={<DeleteIcon />} />
       </Flex>
     )
   }
@@ -45,7 +46,7 @@ const EditablePresent = ({ present }: EditablePresentProps) => {
         w='100%'
         h='35px'
         display='flex'
-        justifyContent='center'
+        justifyContent='space-between'
         borderBottom='1px'
         textAlign='center'
         defaultValue={present.description}
@@ -63,7 +64,6 @@ interface ListItemProps {
   listType: ListType
 }
 const ListItem = ({present, listType}: ListItemProps) => {
-  // set state here as the present? each item manages present state
   // TODO: implement delete present, update present, and click present
   const onChange = () => console.log('Some change')
   if (listType === ListType.WISHLIST) {
@@ -99,6 +99,7 @@ export interface ListProps {
   listType: ListType
 }
 export const List = ({ presents, title, listType }: ListProps) => {
+  // TODO: add empty state and loading state
   return (
     <Box pt='15px' pb='25px' px='20px' minW='300px' bgColor='#E0C9A625' borderRadius={10} textAlign='center'>
       <VStack spacing='10px'>

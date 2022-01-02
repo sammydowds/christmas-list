@@ -16,7 +16,7 @@ async function loginRoute(
     case 'POST':
       const { password, email } = await req.body;
       try {
-        User.findOne({email: email}).exec((err, user) => {
+        User.findOne({email: email}).populate('family').exec((err, user) => {
           if (err) {
             res.status(400).json({error: 'Uh oh. Something went wrong while checking your credentials.'})
           } else if (!user) {
