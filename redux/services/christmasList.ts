@@ -13,7 +13,7 @@ interface LoginRequest {
 export const christmasListApi = createApi({
   reducerPath: 'christmasListApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
-  tagTypes: ['User'],
+  tagTypes: ['User', 'Wishlists'],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginRequest>({
       query: (credentials) => ({
@@ -21,7 +21,7 @@ export const christmasListApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['User']
+      invalidatesTags: ['User', 'Wishlists']
     }),
     logout: builder.mutation<any, void>({
       query: () => ({
@@ -32,7 +32,7 @@ export const christmasListApi = createApi({
     }),
     getUser: builder.query<any, void>({
       query: () => 'user',
-      providesTags: ['User']
+      providesTags: ['User', 'Wishlists']
     }),
     createAccount: builder.mutation<string, LoginRequest>({
       query: (credentials) => ({
@@ -40,10 +40,14 @@ export const christmasListApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['User']
+      invalidatesTags: ['User', 'Wishlists']
+    }),
+    getFamilyWishlists: builder.query<any, void>({
+      query: () => 'wishlists/family',
+      providesTags: ['Wishlists']
     }),
   })
 }
 )
 
-export const { useLoginMutation, useLogoutMutation, useGetUserQuery, useCreateAccountMutation } = christmasListApi
+export const { useLoginMutation, useLogoutMutation, useGetUserQuery, useCreateAccountMutation, useGetFamilyWishlistsQuery } = christmasListApi

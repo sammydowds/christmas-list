@@ -23,11 +23,16 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req
   switch (method) {
     case 'GET':
-      if (req.session.user) {
-        // TODO: may need to fetch more info if scoping the User down is Session
-        res.json({
-          ...req.session.user,
-        });
+      const ironUser = req?.session?.user
+      if (ironUser) {
+        User.findById(ironUser.id).populate('family').populate('wishlist').populate('shoppingList').exec(function(err, data) {
+          if (err) {
+            res.status(400).json({ error: 'There was an error fetching user details.'})
+          }
+          if (data) {
+            res.status(200).json({...ironUser, wishlist: data.wishlist, shoppingList: data.shoppingList, family: data.family })
+          }
+        })
       } else {
         res.json({});
       }
@@ -51,8 +56,8 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
             await newUser.save()
             family.members.push(newUser._id.toString())
             await family.save()
-            await newUser.populate('family')
-            req.session.user = newUser
+            const ironUser = { isLoggedIn: true, email: newUser.email, id: newUser._id, familyId: newUser.family}
+            req.session.user = ironUser
             await req.session.save()
             res.status(200).json(newUser)
           }
@@ -71,8 +76,8 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         await newUser.save()
         family.members = [newUser._id.toString()]
         await family.save()
-        await newUser.populate('family')
-        req.session.user = newUser
+        const ironUser = { isLoggedIn: true, email: newUser.email, id: newUser._id, familyId: newUser.family}
+        req.session.user = ironUser
         await req.session.save()
         res.status(200).json(newUser)
         break
