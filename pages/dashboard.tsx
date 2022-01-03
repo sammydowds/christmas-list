@@ -39,7 +39,7 @@ const OtherWishlists = ({ presentsByPerson }: OtherWishlists) => {
 
 const Dashboard = () => {
     const { data: user = {}, isFetching } = useGetUserQuery()
-    const { data: familyWishlists, isFetching: isFetchingWishlists, error: wishlistsError } = useGetFamilyWishlistsQuery(user.isLoggedIn ?? skipToken)
+    const { data: familyWishlists, isFetching: isFetchingWishlists, error: wishlistsError } = useGetFamilyWishlistsQuery()
     const [logout] = useLogoutMutation()
 
     useEffect(() => {

@@ -13,7 +13,7 @@ interface LoginRequest {
 export const christmasListApi = createApi({
   reducerPath: 'christmasListApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
-  tagTypes: ['User', 'Wishlists', 'Family', 'Wishlist', 'ShoppingList'],
+  tagTypes: ['User', 'Wishlists'],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginRequest>({
       query: (credentials) => ({
@@ -21,13 +21,14 @@ export const christmasListApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['User', 'Wishlists', 'Family', 'Wishlist', 'ShoppingList']
+      invalidatesTags: ['User', 'Wishlists']
     }),
     logout: builder.mutation<any, void>({
       query: () => ({
         url: 'logout',
         method: 'POST',
-      })
+      }),
+      invalidatesTags: ['User', 'Wishlists']
     }),
     getUser: builder.query<any, void>({
       query: () => 'user',
@@ -39,7 +40,7 @@ export const christmasListApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['User', 'Wishlists', 'Family', 'Wishlist', 'ShoppingList']
+      invalidatesTags: ['User', 'Wishlists']
     }),
     getFamilyWishlists: builder.query<any, void>({
       query: () => 'wishlists/family',

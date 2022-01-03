@@ -29,10 +29,10 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         await dbConnect()
         const wishlistPresents = await Present.find().where('_id').in(ironUser.wishlist).exec()
         const shoppingListPresents = await Present.find().where('_id').in(ironUser.shoppingList).exec()
-        const family = await Family.findOne({ id: ironUser.family }).exec()
-        res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppinglist: shoppingListPresents, family: family})
+        const userFamily = await Family.findById(ironUser.family).exec()
+        res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppinglist: shoppingListPresents, family: userFamily})
       } else {
-        res.json({});
+        res.status(401).json({ error: 'Not authorized'});
       }
       break
     case 'POST':
