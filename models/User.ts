@@ -2,6 +2,7 @@ import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcrypt'
 
 export interface IUser {
+    name: string
     email: string,
     wishlist: mongoose.Schema.Types.ObjectId[],
     shoppingList: mongoose.Schema.Types.ObjectId[],
@@ -11,10 +12,17 @@ export interface IUser {
 }
 
 const UserSchema = new Schema<IUser>({
+  name: {
+    type: String,
+    required: [true, 'Please provide a name.'],
+    maxlength: [20, 'Name cannot be more than 20 characters'],
+    unique: true
+  },
   email: {
     type: String,
-    required: [true, 'Please provide a name for this pet.'],
-    maxlength: [20, 'Name cannot be more than 60 characters'],
+    required: [true, 'Please provide an email.'],
+    maxlength: [20, 'Email cannot be more than 20 characters'],
+    unique: true
   },
   wishlist: [{
       type: mongoose.Schema.Types.ObjectId,

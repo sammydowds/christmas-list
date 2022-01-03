@@ -29,7 +29,7 @@ async function wishlistsRoute(
          for (let user of otherUsers) {
            // find presents
            const presents = await Present.find().where('_id').in(user.wishlist).exec();
-           wishlistByName[user?.email] = presents
+           wishlistByName[user?.name] = presents
           }
         return res.status(200).json(wishlistByName)
       } else {

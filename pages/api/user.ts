@@ -38,7 +38,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
     case 'POST':
       // get form data
       await dbConnect()
-      const { email, password, passcode } = req.body
+      const { email, password, passcode, name } = req.body
 
       // passcode exists only when trying to join a family
       if (passcode) {
@@ -50,7 +50,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
 
           if (family) {
             // relate family and user
-            const newUser = new User({ email: email, password: password, family: family._id.toString()})
+            const newUser = new User({ name: name, email: email, password: password, family: family._id.toString()})
             await newUser.save()
             family.members.push(newUser._id.toString())
             await family.save()
@@ -70,7 +70,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
 
         // relate family and user
         const familyId = family._id.toString()
-        const newUser = new User({ email: email, password: password, family: familyId})
+        const newUser = new User({ name: name, email: email, password: password, family: familyId})
         await newUser.save()
         family.members = [newUser._id.toString()]
         await family.save()

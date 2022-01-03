@@ -27,6 +27,10 @@ export const CreateAccountAndFamilyForm = () => {
 	  <Image src='/images/sm-santa.svg' height={75} width={75} />
 	  <Heading as='h4' size='sm'>Create an Account and Family!</Heading>
 	  <FormControl isRequired>
+	    <FormLabel htmlFor='name'>Name</FormLabel>
+	    <Input onChange={handleChange} name="name" variant='flushed' focusBorderColor='green.400' size='lg' type='text' placeholder='Name' /> 
+	  </FormControl>
+	  <FormControl isRequired>
 	    <FormLabel htmlFor='email'>Email</FormLabel>
 	    <Input onChange={handleChange} name="email" variant='flushed' focusBorderColor='green.400' size='lg' type='email' placeholder='Email' /> 
 	  </FormControl>

@@ -4,7 +4,6 @@ import { VStack, Flex, Text, Heading } from '@chakra-ui/react'
 import { useGetUserQuery, useLogoutMutation, useGetFamilyWishlistsQuery } from "../redux/services/christmasList"
 import { useEffect } from "react"
 import Router from "next/router"
-import { skipToken } from '@reduxjs/toolkit/query/react'
 
 interface PresentsByPerson {
     [name: string]: Present[]
@@ -48,8 +47,8 @@ const Dashboard = () => {
         }
     }, [user, isFetching])
 
-    const handleLogout = async () => {
-        await logout()
+    const handleLogout = () => {
+        logout()
         Router.push('/login')
     }
 

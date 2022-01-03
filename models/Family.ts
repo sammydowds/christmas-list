@@ -10,6 +10,7 @@ const FamilySchema = new mongoose.Schema<Family>({
     type: String,
     required: [true, 'Please provide a passcode for the family.'],
     minlength: [20, 'Passcode must be greater than 20 characters.'],
+    unique: true
   },
   members: {
     type: [{
