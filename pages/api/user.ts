@@ -30,9 +30,9 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         const wishlistPresents = await Present.find().where('_id').in(ironUser.wishlist).exec()
         const shoppingListPresents = await Present.find().where('_id').in(ironUser.shoppingList).exec()
         const userFamily = await Family.findById(ironUser.family).exec()
-        res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppinglist: shoppingListPresents, family: userFamily})
+        return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppinglist: shoppingListPresents, family: userFamily})
       } else {
-        res.status(401).json({ error: 'Not authorized'});
+        return res.status(401).json({ error: 'Not authorized'});
       }
       break
     case 'POST':
@@ -45,7 +45,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         // find family with passcode
         Family.findOne({ passcode: passcode}).exec(async function(err, family) {
           if (err) {
-            res.status(400).json({ error: 'Error while fetching Family info'})
+            return res.status(400).json({ error: 'Error while fetching Family info'})
           }
 
           if (family) {
@@ -54,12 +54,12 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
             await newUser.save()
             family.members.push(newUser._id.toString())
             await family.save()
-            const ironUser = { isLoggedIn: true, ...newUser}
+            const ironUser = { isLoggedIn: true, ...newUser._doc}
             req.session.user = ironUser
             await req.session.save()
-            res.status(200).json(newUser)
+            return res.status(200).json(newUser)
           }
-          res.status(400).json({ error: 'Family not found!'})
+          return res.status(400).json({ error: 'Family not found!'})
         })
         break
       } else {
@@ -74,11 +74,14 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         await newUser.save()
         family.members = [newUser._id.toString()]
         await family.save()
-        const ironUser = { isLoggedIn: true, ...newUser}
+        const ironUser = { isLoggedIn: true, ...newUser._doc}
         req.session.user = ironUser
         await req.session.save()
-        res.status(200).json(newUser)
+        return res.status(200).json(newUser)
         break
       }
+    default:
+      res.status(405).json({ error: 'Bad Request' })
+      break
   }
 }
