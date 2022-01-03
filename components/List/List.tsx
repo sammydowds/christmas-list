@@ -83,8 +83,8 @@ const WishlistItem = ({ present }: WishlistItemProps) => {
     }
   }
   return (
-    <Flex align='center' justify='center' w='100%' h='35px' borderBottom='1px'>
-      <Text onClick={handleClick} as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
+    <Flex onClick={handleClick} align='center' justify='center' w='100%' h='35px' borderBottom='1px'>
+      <Text as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
       {present.from && <>
         <Badge mx='5px' colorScheme='green'>{present.from}</Badge>
         <Image src='/images/sm-santa.svg' height='15px' width='15px' />
