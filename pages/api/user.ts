@@ -27,9 +27,13 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
       const ironUser = req?.session?.user
       if (ironUser) {
         await dbConnect()
-        const wishlistPresents = await Present.find().where('_id').in(ironUser.wishlist).exec()
-        const shoppingListPresents = await Present.find().where('_id').in(ironUser.shoppingList).exec()
+        const { wishlist, shoppingList } = await User.findById(ironUser._id).exec()
+
+        // note: could break these out into separate GET requests
+        const wishlistPresents = await Present.find().where('_id').in(wishlist).exec()
+        const shoppingListPresents = await Present.find().where('_id').in(shoppingList).exec()
         const userFamily = await Family.findById(ironUser.family).exec()
+
         return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppinglist: shoppingListPresents, family: userFamily})
       } else {
         return res.status(401).json({ error: 'Not authorized'});
@@ -54,7 +58,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
             await newUser.save()
             family.members.push(newUser._id.toString())
             await family.save()
-            const ironUser = { isLoggedIn: true, ...newUser._doc}
+            const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, family: newUser.family, email: newUser.email }
             req.session.user = ironUser
             await req.session.save()
             return res.status(200).json(newUser)
@@ -74,7 +78,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         await newUser.save()
         family.members = [newUser._id.toString()]
         await family.save()
-        const ironUser = { isLoggedIn: true, ...newUser._doc}
+        const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, family: newUser.family, email: newUser.email }
         req.session.user = ironUser
         await req.session.save()
         return res.status(200).json(newUser)

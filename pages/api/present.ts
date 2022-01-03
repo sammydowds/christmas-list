@@ -16,8 +16,10 @@ async function presentRoute(
       // if id exists update, if not create present
       if (id) {
         // update present
+        // if updating from - then assign or remove from your shopping list
       } else {
         // create present 
+        // assign present to user wishlist
       }
       break
   }

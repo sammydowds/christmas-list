@@ -2,9 +2,13 @@ import { IUser } from "../models/User";
 
 const IRON_SESSION_PASSWORD = process.env.PWORD_IRON_SESSION
 
-interface IronUser extends IUser{
+// note: this should not include data that could change throughout session
+interface IronUser {
   isLoggedIn: boolean,
-  _id: string
+  _id: string, 
+  name: string,
+  email: string,
+  family: string
 }
 
 export const ironOptions = {

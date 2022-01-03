@@ -24,7 +24,7 @@ async function loginRoute(
               return res.status(400).json({error: 'Uh oh. Credentials do not match our records.'})
             }
             // start a session
-            const ironUser = { isLoggedIn: true, ...user._doc}
+            const ironUser = { _id: user._id, isLoggedIn: true, name: user.name, family: user.family, email: user.email }
             req.session.user = ironUser
             await req.session.save()
             return res.status(200).json(user)
