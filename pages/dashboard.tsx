@@ -58,8 +58,8 @@ const Dashboard = () => {
     return (
         <VStack my='20px'>
             <AccountInfo isImpish={isImpish} email={user?.email} passcode={family?.passcode} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
-            {!isFetching && user && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={shoppingList} />}
-            {!isFetching && user && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />}
+            {shoppingList && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={shoppingList} />}
+            {wishlist && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />}
             {!isFetchingWishlists && familyWishlists && < OtherWishlists presentsByPerson={familyWishlists} />}
         </VStack>
     )

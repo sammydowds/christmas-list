@@ -46,8 +46,68 @@ export const christmasListApi = createApi({
       query: () => 'wishlists/family',
       providesTags: ['Wishlists']
     }),
+    claimPresent: builder.mutation<any, void>({
+      query: (id) => ({
+        url: 'wishlists/claim',
+        method: 'POST',
+        body: { id }
+      }),
+      invalidatesTags: ['User', 'Wishlists']
+    }),
+    unclaimPresent: builder.mutation<any, void>({
+      query: (id) => ({
+        url: 'wishlists/unclaim',
+        method: 'POST',
+        body: { id }
+      }),
+      invalidatesTags: ['User', 'Wishlists']
+    }),
+    buyPresent: builder.mutation<any, string>({
+      query: (id) => ({
+        url: 'shoppinglist/buy',
+        method: 'POST',
+        body: { id }
+      }),
+      invalidatesTags: ['User', 'Wishlists']
+    }),
+    unbuyPresent: builder.mutation<any, string>({
+      query: (id) => ({
+        url: 'shoppinglist/unbuy',
+        method: 'POST',
+        body: { id }
+      }),
+      invalidatesTags: ['User', 'Wishlists']
+    }),
+    addPresent: builder.mutation<any, string>({
+      query: (description) => ({
+        url: 'wishlist/add',
+        method: 'POST',
+        body: { description }
+      }),
+      invalidatesTags: ['User']
+    }),
+    deletePresent: builder.mutation<any, string>({
+      query: (id) => ({
+        url: 'wishlist/delete',
+        method: 'POST',
+        body: { id }
+      }),
+      invalidatesTags: ['User']
+    }),
   })
 }
 )
 
-export const { useLoginMutation, useLogoutMutation, useGetUserQuery, useCreateAccountMutation, useGetFamilyWishlistsQuery } = christmasListApi
+export const { 
+  useLoginMutation, 
+  useLogoutMutation, 
+  useGetUserQuery, 
+  useCreateAccountMutation, 
+  useGetFamilyWishlistsQuery, 
+  useBuyPresentMutation,
+  useUnbuyPresentMutation,
+  useAddPresentMutation,
+  useDeletePresentMutation,
+  useClaimPresentMutation,
+  useUnclaimPresentMutation
+} = christmasListApi

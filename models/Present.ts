@@ -14,12 +14,10 @@ const PresentSchema = new mongoose.Schema<Present>({
     maxlength: [20, 'Name cannot be more than 60 characters'],
   },
   to: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
   },
   from: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    type: String,
   },
   isBought: {
     type: Boolean,

@@ -1,6 +1,9 @@
 import Image from 'next/image'
 import { Box, VStack, Heading, Flex, Badge, Text, Editable, EditableInput, EditablePreview, useEditableControls, ButtonGroup, IconButton } from '@chakra-ui/react'
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons'
+import { useClaimPresentMutation, useUnclaimPresentMutation, useBuyPresentMutation, useUnbuyPresentMutation, useAddPresentMutation, useDeletePresentMutation } from "../../redux/services/christmasList"
+import React from 'react'
+
 
 export enum ListType {
   SHOPPING = 'shopping', 
@@ -13,14 +16,17 @@ export interface Present {
   to: string
   from: string | null
   isBought: boolean
-  id: string
+  _id: string
 }
 
-export interface EditablePresentProps {
-  present?: Present
-}
+const AddPresent = () => {
+  const [addPresent, { isLoading: isAdding, error: addError }] = useAddPresentMutation()
 
-const EditablePresent = ({ present }: EditablePresentProps) => {
+  const handleSubmit = async (description: string) => {
+    await addPresent(description)
+    return
+  }
+
   function EditableControls() {
     const {
       isEditing,
@@ -37,7 +43,7 @@ const EditablePresent = ({ present }: EditablePresentProps) => {
     ) : (
       <Flex ml='5px'>
         <IconButton mr='10px' aria-label='edit present' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
-        {present && <IconButton aria-label='delete present' size='sm' icon={<DeleteIcon />} />}
+        {/* {present && <IconButton aria-label='delete present' size='sm' icon={<DeleteIcon />} />} */}
       </Flex>
     )
   }
@@ -49,8 +55,9 @@ const EditablePresent = ({ present }: EditablePresentProps) => {
         justifyContent='space-between'
         borderBottom='1px'
         textAlign='center'
-        defaultValue={present? present?.description : 'Add a present...'}
-        isPreviewFocusable={ present ? false : true}
+        defaultValue={'Add a new present'}
+        isPreviewFocusable={true}
+        onSubmit={handleSubmit}
       >
       <EditablePreview />
       <EditableInput />
@@ -59,35 +66,79 @@ const EditablePresent = ({ present }: EditablePresentProps) => {
   )
 }
 
+interface WishlistItemProps {
+  present: Present
+}
+const WishlistItem = ({ present }: WishlistItemProps) => {
+  const [claimPresent, { isLoading: isClaiming, error: claimError }] = useClaimPresentMutation()
+  const [unclaimPresent, { isLoading: isUnclaiming, error: unclaimError }] = useUnclaimPresentMutation()
+  return (
+    <Flex align='center' justify='center' w='100%' h='35px' borderBottom='1px'>
+      <Text as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
+      {present.from && <>
+        <Badge mx='5px' colorScheme='green'>{present.from}</Badge>
+        <Image src='/images/sm-santa.svg' height='15px' width='15px' />
+      </>}
+    </Flex>
+  )
+}
+
+interface OwnWishlistItemProps {
+  present: Present
+}
+const OwnWishlistItem = ({ present }: OwnWishlistItemProps) => {
+  const [deletePresent, { isLoading: isDeleting, error: deletingError }] = useDeletePresentMutation()
+
+  const handleDelete = async () => {
+    await deletePresent(present._id)
+  }
+
+  return (
+    <Flex align='center' justify='space-between' w='100%' h='35px' borderBottom='1px'>
+      <Text as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
+      <IconButton aria-label='delete present' size='sm' onClick={handleDelete} icon={<DeleteIcon />} />
+    </Flex>
+  )
+}
+
+interface ShoppingListItemProps {
+  present: Present
+}
+const ShoppingListItem = ({ present }: ShoppingListItemProps) => {
+  const [buyPresent, { isLoading: isBuying, error: buyError }] = useBuyPresentMutation()
+  const [unbuyPresent, { isLoading: isUnbuying, error: unbuyError }] = useUnbuyPresentMutation()
+
+  const handleClick = async () => {
+    if (present.isBought) {
+      await unbuyPresent(present._id)
+      return
+    }
+    await buyPresent(present._id)
+    return
+  }
+
+  return (
+    <Flex align='center' justify='center' w='100%' h='35px' borderBottom='1px' onClick={handleClick}>
+      <Text as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
+      {present.from && <>
+        <Badge mx='5px' colorScheme='green'>Bought</Badge>
+        <Image src='/images/sm-santa.svg' height='15px' width='15px' />
+      </>}
+    </Flex>
+  )
+}
+
 interface ListItemProps {
   present: Present,
   listType: ListType
 }
 const ListItem = ({present, listType}: ListItemProps) => {
-  // TODO: implement delete present, update present, and click present
-  const onChange = () => console.log('Some change')
   if (listType === ListType.WISHLIST) {
-    return (
-      <Flex align='center' justify='center' w='100%' h='35px' borderBottom='1px'>
-        <Text as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
-        {present.from && <>
-          <Badge mx='5px' colorScheme='green'>{present.from}</Badge>
-          <Image src='/images/sm-santa.svg' height='15px' width='15px' />
-        </>}
-      </Flex>
-    )
+    return <WishlistItem present={present} />
   } else if (listType === ListType.SHOPPING) {
-    return (
-      <Flex align='center' justify='center' w='100%' h='35px' borderBottom='1px'>
-        <Text as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
-        {present.from && <>
-          <Badge mx='5px' colorScheme='green'>Bought</Badge>
-          <Image src='/images/sm-santa.svg' height='15px' width='15px' />
-        </>}
-      </Flex>
-    )
+    return <ShoppingListItem present={present} />
   } else if (listType === ListType.OWN_WISHLIST) {
-    return <EditablePresent present={present} />
+    return <OwnWishlistItem present={present} />
   }
   return <div></div>
 }
@@ -109,7 +160,7 @@ const ListItems = ({ presents, listType}: ListItemsProps) => {
     <>
       {presents?.map((present: Present) => {
         return (
-            <ListItem key={`${present.id}-${listType}`} present={present} listType={listType} />
+            <ListItem key={`${present._id}-${listType}`} present={present} listType={listType} />
           )
         })
       }
@@ -130,7 +181,7 @@ export const List = ({ presents, title, listType }: ListProps) => {
       <VStack spacing='10px'>
         <Heading as='h4' size='m' >{title}</Heading>
         {presents?.length ? <ListItems presents={presents} listType={listType} /> : <EmptyList />}
-        {listType === ListType.OWN_WISHLIST && <EditablePresent /> }
+        {listType === ListType.OWN_WISHLIST && <AddPresent /> }
       </VStack>
     </Box>
   )
