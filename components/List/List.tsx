@@ -1,8 +1,8 @@
 import Image from 'next/image'
-import { Box, VStack, Heading, Flex, Badge, Text, Editable, EditableInput, EditablePreview, useEditableControls, ButtonGroup, IconButton } from '@chakra-ui/react'
+import { Box, VStack, Heading, Flex, Badge, Text, Editable, EditableInput, EditablePreview, useEditableControls, ButtonGroup, IconButton, Input } from '@chakra-ui/react'
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import { useClaimPresentMutation, useUnclaimPresentMutation, useBuyPresentMutation, useUnbuyPresentMutation, useAddPresentMutation, useDeletePresentMutation } from "../../redux/services/christmasList"
-import React from 'react'
+import React, { useState } from 'react'
 
 
 export enum ListType {
@@ -21,48 +21,36 @@ export interface Present {
 
 const AddPresent = () => {
   const [addPresent, { isLoading: isAdding, error: addError }] = useAddPresentMutation()
+  const [presentDescription, setPresentDescription] = useState('')
 
-  const handleSubmit = async (description: string) => {
-    await addPresent(description)
+  const handleSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault()
+    presentDescription !== '' && await addPresent(presentDescription)
+    setPresentDescription('')
     return
   }
 
-  function EditableControls() {
-    const {
-      isEditing,
-      getSubmitButtonProps,
-      getCancelButtonProps,
-      getEditButtonProps,
-    } = useEditableControls()
+  const handleChange = ({
+    target: name,
+    }: React.ChangeEvent<HTMLInputElement>) => 
+      setPresentDescription(name.value)
 
-    return isEditing ? (
-      <ButtonGroup ml='5px' size='sm'>
-        <IconButton colorScheme='green' aria-label='confirm change' icon={<CheckIcon />} {...getSubmitButtonProps()} />
-        <IconButton colorScheme='red' aria-label='cancel change' icon={<CloseIcon />} {...getCancelButtonProps()} />
-      </ButtonGroup>
-    ) : (
-      <Flex ml='5px'>
-        <IconButton mr='10px' aria-label='edit present' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
-        {/* {present && <IconButton aria-label='delete present' size='sm' icon={<DeleteIcon />} />} */}
-      </Flex>
-    )
-  }
   return(
-    <Editable 
+    <Input
         w='100%'
         h='35px'
         display='flex'
+        variant='flushed'
         justifyContent='space-between'
-        borderBottom='1px'
         textAlign='center'
-        defaultValue={'Add a new present'}
-        isPreviewFocusable={true}
-        onSubmit={handleSubmit}
-      >
-      <EditablePreview />
-      <EditableInput />
-      <EditableControls />
-    </Editable>
+        colorScheme='green'
+        value={presentDescription}
+        placeholder={'Add a present'}
+        onBlur={handleSubmit}
+        onChange={handleChange}
+        fontColor='gray'
+        name='description'
+      />
   )
 }
 
@@ -129,7 +117,7 @@ const ShoppingListItem = ({ present }: ShoppingListItemProps) => {
 
   return (
     <Flex align='center' justify='center' w='100%' h='35px' borderBottom='1px' onClick={handleClick}>
-      <Text as={present.isBought ? 's' : 'span'} color={present.isBought ? 'grey' : 'black'}>{present.description}</Text>
+      <Text as={present.isBought ? 's' : 'span'} color={present.isBought ? 'grey' : 'black'}>{present.description} for {present.to}</Text>
       {present.isBought && <>
         <Badge mx='5px' colorScheme='green'>Bought</Badge>
         <Image src='/images/sm-santa.svg' height='15px' width='15px' />
