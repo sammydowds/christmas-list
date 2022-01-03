@@ -46,7 +46,7 @@ export const christmasListApi = createApi({
       query: () => 'wishlists/family',
       providesTags: ['Wishlists']
     }),
-    claimPresent: builder.mutation<any, void>({
+    claimPresent: builder.mutation<any, string>({
       query: (id) => ({
         url: 'wishlists/claim',
         method: 'POST',
@@ -54,7 +54,7 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User', 'Wishlists']
     }),
-    unclaimPresent: builder.mutation<any, void>({
+    unclaimPresent: builder.mutation<any, string>({
       query: (id) => ({
         url: 'wishlists/unclaim',
         method: 'POST',

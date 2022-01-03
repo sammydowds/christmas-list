@@ -60,7 +60,7 @@ const Dashboard = () => {
             <AccountInfo isImpish={isImpish} email={user?.email} passcode={family?.passcode} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
             {shoppingList && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={shoppingList} />}
             {wishlist && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />}
-            {!isFetchingWishlists && familyWishlists && < OtherWishlists presentsByPerson={familyWishlists} />}
+            {familyWishlists && < OtherWishlists presentsByPerson={familyWishlists} />}
         </VStack>
     )
 }

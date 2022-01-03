@@ -72,9 +72,19 @@ interface WishlistItemProps {
 const WishlistItem = ({ present }: WishlistItemProps) => {
   const [claimPresent, { isLoading: isClaiming, error: claimError }] = useClaimPresentMutation()
   const [unclaimPresent, { isLoading: isUnclaiming, error: unclaimError }] = useUnclaimPresentMutation()
+
+  const handleClick = async () => {
+    if (!present.from) {
+      await claimPresent(present._id)
+      return
+    } else {
+      await unclaimPresent(present._id)
+      return
+    }
+  }
   return (
     <Flex align='center' justify='center' w='100%' h='35px' borderBottom='1px'>
-      <Text as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
+      <Text onClick={handleClick} as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
       {present.from && <>
         <Badge mx='5px' colorScheme='green'>{present.from}</Badge>
         <Image src='/images/sm-santa.svg' height='15px' width='15px' />
