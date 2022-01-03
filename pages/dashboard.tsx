@@ -1,147 +1,14 @@
 import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
 import { VStack, Flex, Text, Heading } from '@chakra-ui/react'
-import { useGetUserQuery, useLogoutMutation, useGetFamilyWishlistsQuery } from "../redux/services/christmasList"
+import { useGetUserQuery, useLogoutMutation, useGetFamilyWishlistsQuery, useGetFamilyQuery, useGetShoppingListQuery, useGetWishlistQuery } from "../redux/services/christmasList"
 import { useEffect } from "react"
 import Router from "next/router"
+import { skipToken } from '@reduxjs/toolkit/query/react'
 
 interface PresentsByPerson {
     [name: string]: Present[]
 }
-
-// resonse that returns everyone but the user logged in
-const presentsByPerson: PresentsByPerson = {
-    "Kate": [
-        {
-            description: 'New Iphone',
-            to: 'Kate',
-            from: null,
-            isBought: false,
-            id: '24'
-        }
-    ],
-    "Sammy": [
-        {
-            description: 'Something Cool',
-            to: 'Sammy',
-            from: 'Kate',
-            isBought: true,
-            id: '23'
-        },
-        {
-            description: 'Fire Truck',
-            to: 'Sammy',
-            from: null,
-            isBought: false,
-            id: '26'
-        }
-    ],
-    "Carly": [
-        {
-            description: 'Something Cool',
-            to: 'Carly',
-            from: 'Kate',
-            isBought: true,
-            id: '23'
-        },
-        {
-            description: 'Fire Truck',
-            to: 'Sammy',
-            from: null,
-            isBought: false,
-            id: '26'
-        },
-        {
-            description: 'Soccer ball',
-            to: 'Sammy',
-            from: null,
-            isBought: false,
-            id: '29'
-        },
-        {
-            description: 'Soccer net',
-            to: 'Sammy',
-            from: null,
-            isBought: false,
-            id: '30'
-        },
-        {
-            description: 'Soccer shirt',
-            to: 'Carly',
-            from: 'Sammy',
-            isBought: false,
-            id: '28'
-        }
-    ],
-}
-
-// a response that returns presents that you want
-// a response that returns presents that are "from" you (shopping list)
-const presentList: Present[] = [
-    {
-        description: 'New Shiny Truck',
-        to: 'Justin',
-        from: null,
-        isBought: false,
-        id: '0'
-    },
-    {
-        description: 'Red Ryder BB Gun',
-        to: 'Sammy',
-        from: 'Sammy',
-        isBought: false,
-        id: '1'
-    },
-    {
-        description: 'New Shiny Truck',
-        to: 'Justin',
-        from: 'Sammy',
-        isBought: false,
-        id: '2'
-    },
-    {
-        description: 'New Shiny Truck',
-        to: 'Justin',
-        from: 'Sammy',
-        isBought: false,
-        id: '3'
-    },
-    {
-        description: 'Red Ryder BB Gun',
-        to: 'Sammy',
-        from: 'Sammy',
-        isBought: false,
-        id: '4'
-    },
-    {
-        description: 'New Shiny Truck',
-        to: 'Kate',
-        from: 'Sammy',
-        isBought: false,
-        id: '5'
-    },
-    {
-        description: 'New Shiny Truck',
-        to: 'Justin',
-        from: 'Sammy',
-        isBought: false,
-        id: '6'
-    },
-    {
-        description: 'Red Ryder BB Gun',
-        to: 'Sammy',
-        from: 'Sammy',
-        isBought: false,
-        id: '7'
-    },
-    {
-        description: 'New Shiny Truck',
-        to: 'Carly',
-        from: 'Sammy',
-        isBought: false,
-        id: '8'
-    }
-]
 
 const EmptyOtherWishlists = () => {
     return (
@@ -172,11 +39,10 @@ const OtherWishlists = ({ presentsByPerson }: OtherWishlists) => {
 
 const Dashboard = () => {
     const { data: user = {}, isFetching } = useGetUserQuery()
-    const { data: familyWishlists, isFetching: isFetchingWishlists, error: wishlistsError } = useGetFamilyWishlistsQuery(undefined,
-        {
-            skip: !user?.family?.passcode
-        }
-    )
+    const { data: familyWishlists, isFetching: isFetchingWishlists, error: wishlistsError } = useGetFamilyWishlistsQuery(user.isLoggedIn ?? skipToken)
+    const { data: family, isFetching: isFetchingFamily, error: familyError } = useGetFamilyQuery(user.isLoggedIn ?? skipToken)
+    const { data: wishlist, isFetching: isFetchingWishlist, error: wishlistError } = useGetWishlistQuery(user.isLoggedIn ?? skipToken)
+    const { data: shoppingList, isFetching: isFetchingShoppingList, error: shoppingListError } = useGetShoppingListQuery(user.isLoggedIn ?? skipToken)
     const [logout] = useLogoutMutation()
 
     useEffect(() => {
@@ -184,9 +50,6 @@ const Dashboard = () => {
             Router.push('/login')
         }
     }, [user, isFetching])
-
-    const ownWishlist = user.wishlist // TODO: off of user
-    const ownShoppingList = user.shoppingList // TODO: off of user
 
     const handleLogout = async () => {
         await logout()
@@ -196,9 +59,9 @@ const Dashboard = () => {
     const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) && user.shoppingList.length > 0
     return (
         <VStack my='20px'>
-            <AccountInfo isImpish={isImpish} email={user?.email} passcode={user?.family?.passcode} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
-            {!isFetching && user && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={ownShoppingList} />}
-            {!isFetching && user && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={ownWishlist} />}
+            <AccountInfo isImpish={isImpish} email={user?.email} passcode={family?.passcode} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
+            {!isFetchingShoppingList && shoppingList && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={shoppingList} />}
+            {!isFetchingWishlist && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />}
             {!isFetchingWishlists && familyWishlists && < OtherWishlists presentsByPerson={familyWishlists} />}
         </VStack>
     )

@@ -29,7 +29,7 @@ async function loginRoute(
                 res.status(400).json({ error: 'Credentials were found to not match.' })
               } else {
                 // start a session
-                const ironUser = { isLoggedIn: true, email: user.email, id: user._id, familyId: user.family}
+                const ironUser = { isLoggedIn: true, ...user._doc}
                 req.session.user = ironUser
                 await req.session.save()
                 res.status(200).json(user)

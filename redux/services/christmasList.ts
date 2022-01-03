@@ -13,7 +13,7 @@ interface LoginRequest {
 export const christmasListApi = createApi({
   reducerPath: 'christmasListApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
-  tagTypes: ['User', 'Wishlists'],
+  tagTypes: ['User', 'Wishlists', 'Family', 'Wishlist', 'ShoppingList'],
   endpoints: (builder) => ({
     login: builder.mutation<string, LoginRequest>({
       query: (credentials) => ({
@@ -21,18 +21,17 @@ export const christmasListApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['User', 'Wishlists']
+      invalidatesTags: ['User', 'Wishlists', 'Family', 'Wishlist', 'ShoppingList']
     }),
     logout: builder.mutation<any, void>({
       query: () => ({
         url: 'logout',
         method: 'POST',
-      }),
-      invalidatesTags: ['User']
+      })
     }),
     getUser: builder.query<any, void>({
       query: () => 'user',
-      providesTags: ['User', 'Wishlists']
+      providesTags: ['User']
     }),
     createAccount: builder.mutation<string, LoginRequest>({
       query: (credentials) => ({
@@ -40,14 +39,26 @@ export const christmasListApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      invalidatesTags: ['User', 'Wishlists']
+      invalidatesTags: ['User', 'Wishlists', 'Family', 'Wishlist', 'ShoppingList']
     }),
     getFamilyWishlists: builder.query<any, void>({
       query: () => 'wishlists/family',
       providesTags: ['Wishlists']
     }),
+    getFamily: builder.query<any, void>({
+      query: () => 'family',
+      providesTags: ['Family']
+    }),
+    getShoppingList: builder.query<any, void>({
+      query: () => 'shopping',
+      providesTags: ['ShoppingList']
+    }),
+    getWishlist: builder.query<any, void>({
+      query: () => 'wishlist',
+      providesTags: ['Wishlist']
+    }),
   })
 }
 )
 
-export const { useLoginMutation, useLogoutMutation, useGetUserQuery, useCreateAccountMutation, useGetFamilyWishlistsQuery } = christmasListApi
+export const { useLoginMutation, useLogoutMutation, useGetUserQuery, useCreateAccountMutation, useGetFamilyWishlistsQuery, useGetFamilyQuery, useGetShoppingListQuery, useGetWishlistQuery } = christmasListApi

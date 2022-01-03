@@ -1,7 +1,7 @@
-import mongoose, { Schema, Document } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcrypt'
 
-export interface IUser extends Document {
+export interface IUser {
     email: string,
     wishlist?: mongoose.Schema.Types.ObjectId[],
     shoppingList?: mongoose.Schema.Types.ObjectId[],

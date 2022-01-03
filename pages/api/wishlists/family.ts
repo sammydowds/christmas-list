@@ -13,8 +13,8 @@ async function wishlistRoute(
   res: NextApiResponse,
 ) {
   try {
-    const userId = req.session.user?.id
-    const id = req.session.user?.familyId
+    const userId = req.session.user?._id
+    const id = req.session.user?.family
     await dbConnect()
     // check if passcode exists for family
     Family.findOne({ id: id }).exec(async function (err, data) {

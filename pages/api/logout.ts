@@ -10,5 +10,5 @@ async function logoutRoute(
   res: NextApiResponse,
 ) {
   req.session.destroy();
-  res.json({});
+  res.json({ isLoggedIn: false, email: '', id: '', familyId: ''});
 }
