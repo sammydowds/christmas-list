@@ -17,27 +17,24 @@ async function wishlistRoute(
     const id = req.session.user?.family
     await dbConnect()
     // check if passcode exists for family
-    Family.findOne({ id: id }).exec(async function (err, data) {
-      if (err) {
-        res.status(400).json({ error: 'Error while fetching family data', message: err })
-      }
-      if (data) {
-        // find users
-        const users = await User.find().where('_id').in(data.members).populate('wishlist').exec();
-        // filter out user who made request
-        const otherUsers = users.filter((user) => {
-          return user._id.toString() !== userId
-        })
-        let wishlistByName: any = {}
-        for (let user of otherUsers) {
-          // find presents
-          const presents = await Present.find().where('_id').in(user.wishlist).exec();
-          wishlistByName[user?.email] = presents
+    const family = await Family.findOne({ id: id }).exec()
+    if (family) {
+       // find users
+       const users = await User.find().where('_id').in(family.members).populate('wishlist').exec();
+       // filter out user who made request
+       const otherUsers = users.filter((user) => {
+         return user._id.toString() !== userId
+       })
+       let wishlistByName: any = {}
+       for (let user of otherUsers) {
+         // find presents
+         const presents = await Present.find().where('_id').in(user.wishlist).exec();
+         wishlistByName[user?.email] = presents
         }
-        res.status(200).json(wishlistByName)
-      }
-      res.status(400).json({ error: 'Family not found.' })
-    })
+      return res.status(200).json(wishlistByName)
+    } else {
+      return res.status(400).json({ error: 'Error fetching family wishlists.'})
+    }
   } catch (err) {
     res.status(500).json({ error: err })
   }

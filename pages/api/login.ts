@@ -11,32 +11,27 @@ async function loginRoute(
   res: NextApiResponse,
 ) {
   const { method } = req
-  await dbConnect()
   switch (method) {
     case 'POST':
       const { password, email } = await req.body;
       try {
-        User.findOne({ email: email }).exec((err, user) => {
-          if (err) {
-            res.status(400).json({ error: 'Uh oh. Something went wrong while checking your credentials.' })
-          } else if (!user) {
-            res.status(400).json({ error: 'Uh oh. Our elves found that your credentials were incorrect.' })
-          } else {
-            user.comparePasswords(password, async (matchError: any, isMatch: boolean) => {
-              if (matchError) {
-                res.status(400).json({ error: 'Uh oh. Something went wrong while checking your credentials.' })
-              } else if (!isMatch) {
-                res.status(400).json({ error: 'Credentials were found to not match.' })
-              } else {
-                // start a session
-                const ironUser = { isLoggedIn: true, ...user._doc}
-                req.session.user = ironUser
-                await req.session.save()
-                res.status(200).json(user)
-              }
-            })
-          }
-        })
+        await dbConnect()
+        const user = await User.findOne({ email: email }).exec()
+        if (user) {
+          user.comparePasswords(password, async function (err: any, isMatch: boolean) {
+            if (err) return res.status(400).json({ error: 'Uh oh. Something went wrong while checking your credentials'})
+            if (!isMatch) {
+              return res.status(400).json({error: 'Uh oh. Credentials do not match our records.'})
+            }
+            // start a session
+            const ironUser = { isLoggedIn: true, ...user._doc}
+            req.session.user = ironUser
+            await req.session.save()
+            return res.status(200).json(user)
+          })
+        } else {
+          res.status(400).json({error: 'Uh oh. Credentials do not match our records.'})
+        }
       } catch (error) {
         res.status(500).json({ error: 'Something went wrong while trying to log you in.', message: error })
       }
