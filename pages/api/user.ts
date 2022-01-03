@@ -26,6 +26,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
     case 'GET':
       const ironUser = req?.session?.user
       if (ironUser) {
+        await dbConnect()
         const wishlistPresents = await Present.find().where('_id').in(ironUser.wishlist).exec()
         const shoppingListPresents = await Present.find().where('_id').in(ironUser.shoppingList).exec()
         const family = await Family.findOne({ id: ironUser.family }).exec()
