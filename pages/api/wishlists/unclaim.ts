@@ -21,7 +21,7 @@ async function unclaimRoute(
           const present = await Present.findById(id).exec()
           if (user && present) {
             const newShoppingList = user.shoppingList.filter((presentId: string) => {
-              return presentId !== id
+              return presentId.toString() !== id
             })
             user.shoppingList = newShoppingList
             await user.save()

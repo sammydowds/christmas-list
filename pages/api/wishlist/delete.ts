@@ -19,19 +19,8 @@ async function deleteRoute(
       if (id && ironUser) {
         try {
           await dbConnect()
-          const user = await User.findById(ironUser._id).exec()
-          if (user) {
-            // delete present ID from wishlist
-            const newWishlist = user.wishlist.filter((presentId: string) => {
-              return presentId !== id
-            })
-            user.wishlist = newWishlist
-            await user.save()
-            await Present.findById(id).remove().exec()
-            res.status(200).json({ success: true })
-          } else {
-            res.status(400).json({ error: 'There was an issue while finding user.'})
-          }
+          await Present.findById(id).remove().exec()
+          res.status(200).json({ success: true })
         } catch {
           res.status(500).json({ error: 'Could not delete present.'})
         }

@@ -34,7 +34,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         const shoppingListPresents = await Present.find().where('_id').in(shoppingList).exec()
         const userFamily = await Family.findById(ironUser.family).exec()
 
-        return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppinglist: shoppingListPresents, family: userFamily})
+        return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppingList: shoppingListPresents, family: userFamily})
       } else {
         return res.status(401).json({ error: 'Not authorized'});
       }
