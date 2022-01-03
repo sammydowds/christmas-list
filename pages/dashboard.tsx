@@ -1,7 +1,7 @@
 import { AccountInfo } from "../components/AccountInfo"
 import { Present, List, ListType } from '../components/List'
 import { VStack, Flex, Text, Heading } from '@chakra-ui/react'
-import { useGetUserQuery, useLogoutMutation, useGetFamilyWishlistsQuery, useGetFamilyQuery, useGetShoppingListQuery, useGetWishlistQuery } from "../redux/services/christmasList"
+import { useGetUserQuery, useLogoutMutation, useGetFamilyWishlistsQuery } from "../redux/services/christmasList"
 import { useEffect } from "react"
 import Router from "next/router"
 import { skipToken } from '@reduxjs/toolkit/query/react'
@@ -40,9 +40,6 @@ const OtherWishlists = ({ presentsByPerson }: OtherWishlists) => {
 const Dashboard = () => {
     const { data: user = {}, isFetching } = useGetUserQuery()
     const { data: familyWishlists, isFetching: isFetchingWishlists, error: wishlistsError } = useGetFamilyWishlistsQuery(user.isLoggedIn ?? skipToken)
-    const { data: family, isFetching: isFetchingFamily, error: familyError } = useGetFamilyQuery(user.isLoggedIn ?? skipToken)
-    const { data: wishlist, isFetching: isFetchingWishlist, error: wishlistError } = useGetWishlistQuery(user.isLoggedIn ?? skipToken)
-    const { data: shoppingList, isFetching: isFetchingShoppingList, error: shoppingListError } = useGetShoppingListQuery(user.isLoggedIn ?? skipToken)
     const [logout] = useLogoutMutation()
 
     useEffect(() => {
@@ -56,12 +53,14 @@ const Dashboard = () => {
         Router.push('/login')
     }
 
+    const { shoppingList, wishlist, family } = user
+
     const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) && user.shoppingList.length > 0
     return (
         <VStack my='20px'>
             <AccountInfo isImpish={isImpish} email={user?.email} passcode={family?.passcode} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
-            {!isFetchingShoppingList && shoppingList && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={shoppingList} />}
-            {!isFetchingWishlist && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />}
+            {!isFetching && user && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={shoppingList} />}
+            {!isFetching && user && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />}
             {!isFetchingWishlists && familyWishlists && < OtherWishlists presentsByPerson={familyWishlists} />}
         </VStack>
     )

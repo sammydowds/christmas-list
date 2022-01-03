@@ -3,9 +3,9 @@ import bcrypt from 'bcrypt'
 
 export interface IUser {
     email: string,
-    wishlist?: mongoose.Schema.Types.ObjectId[],
-    shoppingList?: mongoose.Schema.Types.ObjectId[],
-    family?: mongoose.Schema.Types.ObjectId,
+    wishlist: mongoose.Schema.Types.ObjectId[],
+    shoppingList: mongoose.Schema.Types.ObjectId[],
+    family: mongoose.Schema.Types.ObjectId,
     password: string,
     comparePasswords(candidatePassword: string, cb: (err: Error | null, isMatch: boolean | null) => void): void;
 }

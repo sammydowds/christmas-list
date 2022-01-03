@@ -45,20 +45,8 @@ export const christmasListApi = createApi({
       query: () => 'wishlists/family',
       providesTags: ['Wishlists']
     }),
-    getFamily: builder.query<any, void>({
-      query: () => 'family',
-      providesTags: ['Family']
-    }),
-    getShoppingList: builder.query<any, void>({
-      query: () => 'shopping',
-      providesTags: ['ShoppingList']
-    }),
-    getWishlist: builder.query<any, void>({
-      query: () => 'wishlist',
-      providesTags: ['Wishlist']
-    }),
   })
 }
 )
 
-export const { useLoginMutation, useLogoutMutation, useGetUserQuery, useCreateAccountMutation, useGetFamilyWishlistsQuery, useGetFamilyQuery, useGetShoppingListQuery, useGetWishlistQuery } = christmasListApi
+export const { useLoginMutation, useLogoutMutation, useGetUserQuery, useCreateAccountMutation, useGetFamilyWishlistsQuery } = christmasListApi

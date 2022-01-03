@@ -3,6 +3,7 @@ import { ironOptions } from "../../utils/ironOptions";
 import { NextApiRequest, NextApiResponse } from "next";
 import Family from "../../models/Family";
 import User from "../../models/User";
+import Present from '../../models/Present'
 import dbConnect from "../../utils/dbConnect";
 
 // TODO: type the User here
@@ -25,7 +26,10 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
     case 'GET':
       const ironUser = req?.session?.user
       if (ironUser) {
-        res.status(200).json(ironUser)
+        const wishlistPresents = await Present.find().where('_id').in(ironUser.wishlist).exec()
+        const shoppingListPresents = await Present.find().where('_id').in(ironUser.shoppingList).exec()
+        const family = await Family.findOne({ id: ironUser.family }).exec()
+        res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppinglist: shoppingListPresents, family: family})
       } else {
         res.json({});
       }
