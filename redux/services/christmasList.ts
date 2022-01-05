@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { FamilyWishlists, User } from '../../pages/dashboard'
 // TODO: type login response and request 
 
 const prodUrl = 'https://christmas-list-woad.vercel.app/api/'
@@ -30,7 +31,7 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User', 'Wishlists']
     }),
-    getUser: builder.query<any, void>({
+    getUser: builder.query<User, void>({
       query: () => 'user',
       providesTags: ['User']
     }),
@@ -42,8 +43,8 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User', 'Wishlists']
     }),
-    getFamilyWishlists: builder.query<any, void>({
-      query: () => 'wishlists/family',
+    getFamilyWishlists: builder.query<FamilyWishlists, string>({
+      query: (id) => `wishlists/family/${id}`,
       providesTags: ['Wishlists']
     }),
     claimPresent: builder.mutation<any, string>({

@@ -32,9 +32,9 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         // note: could break these out into separate GET requests
         const wishlistPresents = await Present.find().where('_id').in(wishlist).exec()
         const shoppingListPresents = await Present.find().where('_id').in(shoppingList).exec()
-        const userFamily = await Family.findById(ironUser.family).exec()
+        const userFamilies = await Family.find({ _id: { $in: ironUser.families } })
 
-        return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppingList: shoppingListPresents, family: userFamily})
+        return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppingList: shoppingListPresents, families: userFamilies})
       } else {
         return res.status(401).json({ error: 'Not authorized'});
       }
@@ -42,7 +42,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
     case 'POST':
       // get form data
       await dbConnect()
-      const { email, password, passcode, name } = req.body
+      const { email, password, passcode, name, familyName } = req.body
 
       // passcode exists only when trying to join a family
       if (passcode) {
@@ -58,7 +58,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
             await newUser.save()
             family.members.push(newUser._id.toString())
             await family.save()
-            const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, family: newUser.family, email: newUser.email }
+            const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, families: newUser.families, email: newUser.email }
             req.session.user = ironUser
             await req.session.save()
             return res.status(200).json(newUser)
@@ -69,16 +69,16 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
       } else {
         // create family
         const passcode = generateFamilyPasscode(25)
-        const family = new Family({ passcode: passcode })
+        const family = new Family({ name: familyName, passcode: passcode })
         await family.save()
 
         // relate family and user
-        const familyId = family._id.toString()
-        const newUser = new User({ name: name, email: email, password: password, family: familyId})
+        const familyIdArr = [family._id.toString()]
+        const newUser = new User({ name: name, email: email, password: password, families: familyIdArr})
         await newUser.save()
         family.members = [newUser._id.toString()]
         await family.save()
-        const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, family: newUser.family, email: newUser.email }
+        const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, families: newUser.families, email: newUser.email }
         req.session.user = ironUser
         await req.session.save()
         return res.status(200).json(newUser)

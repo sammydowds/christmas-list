@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 export interface Family {
+    name: string
     passcode: string,
     members?: mongoose.Schema.Types.ObjectId[]
 }
@@ -17,6 +18,10 @@ const FamilySchema = new mongoose.Schema<Family>({
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     }]
+  },
+  name: {
+    type: String,
+    required: [true, 'Please provide a name for your family.']
   }
 })
 

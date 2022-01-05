@@ -1,4 +1,5 @@
-import { IUser } from "../models/User";
+import mongoose from 'mongoose'
+
 
 const IRON_SESSION_PASSWORD = process.env.PWORD_IRON_SESSION
 
@@ -8,7 +9,7 @@ interface IronUser {
   _id: string, 
   name: string,
   email: string,
-  family: string
+  families: mongoose.ObjectId[]
 }
 
 export const ironOptions = {

@@ -6,7 +6,7 @@ export interface IUser {
     email: string,
     wishlist: mongoose.Schema.Types.ObjectId[],
     shoppingList: mongoose.Schema.Types.ObjectId[],
-    family: mongoose.Schema.Types.ObjectId,
+    families: mongoose.Schema.Types.ObjectId,
     password: string,
     comparePasswords(candidatePassword: string, cb: (err: Error | null, isMatch: boolean | null) => void): void;
 }
@@ -34,10 +34,10 @@ const UserSchema = new Schema<IUser>({
     ref: "Present"
   }
 ],
-  family: {
+  families: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Family"
-  },
+    ref: "Families"
+  }],
   password: {
     type: String,
     required: [true, 'Please provide a password']

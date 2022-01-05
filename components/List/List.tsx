@@ -1,22 +1,14 @@
 import Image from 'next/image'
-import { Box, VStack, Heading, Flex, Badge, Text, Editable, EditableInput, EditablePreview, useEditableControls, ButtonGroup, IconButton, Input } from '@chakra-ui/react'
-import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons'
+import { Box, VStack, Heading, Flex, Badge, Text, IconButton, Input } from '@chakra-ui/react'
+import { DeleteIcon } from '@chakra-ui/icons'
 import { useClaimPresentMutation, useUnclaimPresentMutation, useBuyPresentMutation, useUnbuyPresentMutation, useAddPresentMutation, useDeletePresentMutation } from "../../redux/services/christmasList"
 import React, { useState } from 'react'
-
+import { Present } from '../../pages/dashboard'
 
 export enum ListType {
   SHOPPING = 'shopping', 
   OWN_WISHLIST = 'own_wishlist',
   WISHLIST = 'wishlist'
-}
-
-export interface Present {
-  description: string, 
-  to: string
-  from: string | null
-  isBought: boolean
-  _id: string
 }
 
 const AddPresent = () => {
@@ -93,7 +85,7 @@ const OwnWishlistItem = ({ present }: OwnWishlistItemProps) => {
 
   return (
     <Flex align='center' justify='space-between' w='100%' h='35px' borderBottom='1px'>
-      <Text as={present.from ? 's' : 'span'} color={present.from ? 'grey' : 'black'}>{present.description}</Text>
+      <Text as={'span'} color={'black'}>{present.description}</Text>
       <IconButton aria-label='delete present' size='sm' onClick={handleDelete} icon={<DeleteIcon />} />
     </Flex>
   )

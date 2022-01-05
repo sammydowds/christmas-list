@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 // TODO: create second password field to make sure they match
 export const CreateAccountAndFamilyForm = () => {
-  const [formState, setFormState] = useState({ email: '', password: ''})
+  const [formState, setFormState] = useState({ name: '', email: '', password: '', familyName: ''})
   const [createAccount, { isLoading, error }] = useCreateAccountMutation()
   
   const handleSubmit = async (event: React.SyntheticEvent) => {
@@ -37,6 +37,10 @@ export const CreateAccountAndFamilyForm = () => {
 	  <FormControl isRequired>
 	    <FormLabel htmlFor='password'>Password</FormLabel>
 	    <Input onChange={handleChange} name="password" variant='flushed' focusBorderColor='green.400' size='lg' type='password' placeholder='Enter password' />
+	  </FormControl>
+	  <FormControl isRequired>
+	    <FormLabel htmlFor='familyName'>Family Name</FormLabel>
+	    <Input onChange={handleChange} name="familyName" variant='flushed' focusBorderColor='green.400' size='lg' type='text' placeholder='Enter a family name' />
 	  </FormControl>
 	  <Button type="submit" isLoading={isLoading} isFullWidth size='md' colorScheme="green">Create Account And Family</Button>
 	  {error && <Box maxW='250px' height='50px'>
