@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import Router from "next/router"
 import { Family } from "../components/Family"
 import mongoose from "mongoose"
+import { UpdateFamilies } from "../components/UpdateFamilies"
 
 export interface Family {
     _id: string,
@@ -126,6 +127,7 @@ const Dashboard = () => {
             {selectedFamily._id !== '' && < OtherWishlists selectedFamily={selectedFamily} />}
             {/* TODO: shopping list should stay the same */}
             {user?.shoppingList && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={user?.shoppingList} />}
+            <UpdateFamilies families={user?.families} />
         </VStack>
     )
 }

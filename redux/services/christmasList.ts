@@ -95,6 +95,22 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User']
     }),
+    addFamily: builder.mutation<any, string>({
+      query: (passcode) => ({
+        url: 'families/add',
+        method: 'POST',
+        body: { passcode }
+      }),
+      invalidatesTags: ['User']
+    }),
+    deleteFamily: builder.mutation<any, string>({
+      query: (id) => ({
+        url: 'families/delete',
+        method: 'POST',
+        body: { id }
+      }),
+      invalidatesTags: ['User']
+    }),
   })
 }
 )
@@ -110,5 +126,7 @@ export const {
   useAddPresentMutation,
   useDeletePresentMutation,
   useClaimPresentMutation,
-  useUnclaimPresentMutation
+  useUnclaimPresentMutation,
+  useDeleteFamilyMutation,
+  useAddFamilyMutation
 } = christmasListApi

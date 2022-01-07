@@ -9,7 +9,6 @@ interface IronUser {
   _id: string, 
   name: string,
   email: string,
-  families: mongoose.ObjectId[]
 }
 
 export const ironOptions = {

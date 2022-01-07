@@ -27,12 +27,12 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
       const ironUser = req?.session?.user
       if (ironUser) {
         await dbConnect()
-        const { wishlist, shoppingList } = await User.findById(ironUser._id).exec()
+        const { wishlist, shoppingList, families } = await User.findById(ironUser._id).exec()
 
         // note: could break these out into separate GET requests
         const wishlistPresents = await Present.find().where('_id').in(wishlist).exec()
         const shoppingListPresents = await Present.find().where('_id').in(shoppingList).exec()
-        const userFamilies = await Family.find({ _id: { $in: ironUser.families } })
+        const userFamilies = await Family.find({ _id: { $in: families } })
 
         return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppingList: shoppingListPresents, families: userFamilies})
       } else {
