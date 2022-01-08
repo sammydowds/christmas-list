@@ -59,15 +59,15 @@ const SelectFamily = ({ families, onChange, selectedFamilyId }: SelectFamilyProp
 
 
 const Dashboard = () => {
-    const { data: user, isFetching } = useGetUserQuery()
+    const { data, isFetching } = useGetUserQuery()
     const [logout] = useLogoutMutation()
     const [selectedFamily, setSelectedFamily] = useState({_id: '', name: '', passcode: '', members: []} as Family)
 
     useEffect(() => {
-        if (!user?.isLoggedIn && isFetching === false) {
+        if (!data?.isLoggedIn && isFetching === false) {
             Router.push('/login')
         }
-    }, [user, isFetching])
+    }, [data, isFetching])
 
     const handleLogout = () => {
         logout()
@@ -77,24 +77,21 @@ const Dashboard = () => {
     const handleSelectedFamilyIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         event.preventDefault()
         const familyId = event.target.value
-        const family = user?.families.filter((family: Family) => {
+        const family = data?.families.filter((family: Family) => {
             return family._id === familyId
         })[0]
         family && setSelectedFamily(family)
     }
 
-    console.log('Wishlist??', user?.wishlist)
-    console.log('user??', user)
-
-    const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) && user.shoppingList.length > 0
+    const isImpish = data?.shoppingList && Array.isArray(data?.shoppingList) && data.shoppingList.length > 0
     return (
         <VStack my='20px'>
-            <AccountInfo isImpish={isImpish} name={user?.name} email={user?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
-            <ManageFamilies families={user?.families} />
+            <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
+            <ManageFamilies families={data?.families} />
             <Heading>{selectedFamily.name} Family</Heading>
-            {!isFetching && user?.wishlist && <OwnWishlist wishlist={user?.wishlist} />}
-            {!isFetching && user?.shoppingList && <ShoppingList shoppingList={user?.shoppingList} />}
-            <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={user?.families} />
+            {!isFetching && data?.wishlist && <OwnWishlist wishlist={data?.wishlist} />}
+            {!isFetching && data?.shoppingList && <ShoppingList shoppingList={data?.shoppingList} />}
+            <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={data?.families} />
             {selectedFamily._id !== '' && <OthersWishlists selectedFamily={selectedFamily} />}
         </VStack>
     )

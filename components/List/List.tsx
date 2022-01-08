@@ -120,14 +120,14 @@ const ShoppingListItem = ({ present }: ShoppingListItemProps) => {
 
 interface ListItemProps {
   present: Present,
-  listType: ListType
+  type: ListType
 }
-const ListItem = ({present, listType}: ListItemProps) => {
-  if (listType === ListType.WISHLIST) {
+const ListItem = ({present, type}: ListItemProps) => {
+  if (type === ListType.WISHLIST) {
     return <WishlistItem present={present} />
-  } else if (listType === ListType.SHOPPING) {
+  } else if (type === ListType.SHOPPING) {
     return <ShoppingListItem present={present} />
-  } else if (listType === ListType.OWN_WISHLIST) {
+  } else if (type === ListType.OWN_WISHLIST) {
     return <OwnWishlistItem present={present} />
   }
   return <div></div>
@@ -143,14 +143,14 @@ const EmptyList = () => {
 
 interface ListItemsProps {
   presents: Present[],
-  listType: ListType,
+  type: ListType,
 }
-const ListItems = ({ presents, listType}: ListItemsProps) => {
+const ListItems = ({ presents, type}: ListItemsProps) => {
   return (
     <>
       {presents?.map((present: Present) => {
         return (
-            <ListItem key={`${present._id}-${listType}`} present={present} listType={listType} />
+            <ListItem key={`${present._id}-${type}`} present={present} type={type} />
           )
         })
       }
@@ -162,16 +162,16 @@ export interface ListProps {
   presents?: Present[]
   title?: string
   isEditable?: boolean
-  listType: ListType
+  type: ListType
 }
-export const List = ({ presents, title, listType }: ListProps) => {
+export const List = ({ presents, title, type }: ListProps) => {
   // TODO: add cbs for deleting, editing, and creating presents
   return (
     <Box pt='15px' pb='25px' px='20px' minW='300px' bgColor='#E0C9A625' borderRadius={10} textAlign='center'>
       <VStack spacing='10px'>
         <Heading as='h4' size='m' >{title}</Heading>
-        {presents?.length ? <ListItems presents={presents} listType={listType} /> : <EmptyList />}
-        {listType === ListType.OWN_WISHLIST && <AddPresent /> }
+        {presents?.length ? <ListItems presents={presents} type={type} /> : <EmptyList />}
+        {type === ListType.OWN_WISHLIST && <AddPresent /> }
       </VStack>
     </Box>
   )

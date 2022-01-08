@@ -24,7 +24,7 @@ export const OthersWishlists = ({ selectedFamily }: OthersWishlists) => {
             <>
                 {Object.entries(familyWishlists).map(([name, presents]) => {
                     return (
-                        <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
+                        <List key={`${name}-wishlist`} type={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
                     )
                 })}
             </>

@@ -7,6 +7,6 @@ interface ShoppingListProps {
 }
 export const ShoppingList = ({ shoppingList }: ShoppingListProps) => {
     return (
-        <List listType={ListType.OWN_WISHLIST} title={'Shopping List'} presents={shoppingList} />
+        <List type={ListType.OWN_WISHLIST} title={'Shopping List'} presents={shoppingList} />
     )
 }

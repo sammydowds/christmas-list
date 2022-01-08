@@ -44,9 +44,9 @@ export const AccountInfo = ({ name, isImpish, email, onClickDeleteAccount, onCli
         <Box borderWidth='2px' p='10px' borderRadius='10px'>
           <Flex display='column'>
             <Heading as='h4' size='sm'>Profile</Heading>
-            <Text>Name: {name}</Text>
-            <Text>Email: {email}</Text>
-            <Text display='flex'>Status:&nbsp; {isImpish ? <ImpishStatus /> : <AdmirableStatus />}</Text>
+            <Text as='div'>Name: {name}</Text>
+            <Text as='div'>Email: {email}</Text>
+            <Text as='div' display='flex'>Status:&nbsp; {isImpish ? <ImpishStatus /> : <AdmirableStatus />}</Text>
             <ButtonGroup mt='5px'>
               <Button onClick={onClickDeleteAccount} colorScheme='red'>Delete Account</Button>
               <Button onClick={onClickLogout} colorScheme='blue'>Logout</Button>

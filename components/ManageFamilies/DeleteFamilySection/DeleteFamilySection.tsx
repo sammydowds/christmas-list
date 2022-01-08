@@ -15,7 +15,7 @@ const Family = ({ family, deletingFamily, onDelete}: FamilyProps) => {
         <>
         <Flex px='20px' align='center' justify='space-between' w='100%' h='35px'>
             {family.name}
-            <Text fontSize='14px' color='grey' decoration='underline' onClick={onCopy}>{hasCopied ? 'copied!' : 'copy passcode'}</Text>
+            <Text fontSize='14px' color='grey' decoration='underline' cursor='pointer' onClick={onCopy}>{hasCopied ? 'copied!' : 'copy passcode'}</Text>
             <div>
                 <DeleteIcon color={deletingFamily ? 'grey' : undefined} onClick={() => onDelete(family._id)} cursor='pointer'/>
             </div>
@@ -45,7 +45,7 @@ export const DeleteFamilySection = ({ families }: DeleteFamilySectionProps) => {
             </Box>
             {families?.map((family) => {
                 return(
-                    <Family family={family} onDelete={deleteFamily} deletingFamily={deletingFamily} />                  
+                    <Family key={`manage-${family._id}`} family={family} onDelete={deleteFamily} deletingFamily={deletingFamily} />                  
                 )
             })}
         </>

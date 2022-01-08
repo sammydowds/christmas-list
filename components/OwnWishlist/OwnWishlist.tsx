@@ -7,6 +7,6 @@ interface OwnWishlistProps {
 }
 export const OwnWishlist = ({ wishlist }: OwnWishlistProps) => {
     return (
-        <List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />
+        <List type={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />
     )
 }
