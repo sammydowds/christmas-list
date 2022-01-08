@@ -5,18 +5,9 @@ import Family from "../../models/Family";
 import User from "../../models/User";
 import Present from '../../models/Present'
 import dbConnect from "../../utils/dbConnect";
+import { generateFamilyPasscode } from "./helpers";
 
 // TODO: type the User here
-
-const generateFamilyPasscode = (length: number) => {
-  let result = ''
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length
-  for ( let i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
- }
- return result
-}
 
 export default withIronSessionApiRoute(userRoute, ironOptions);
 
@@ -68,7 +59,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         break
       } else {
         // create family
-        const passcode = generateFamilyPasscode(25)
+        const passcode = generateFamilyPasscode()
         const family = new Family({ name: familyName, passcode: passcode })
         await family.save()
 

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 import Router from "next/router"
 import { Family } from "../components/Family"
 import mongoose from "mongoose"
-import { UpdateFamilies } from "../components/UpdateFamilies"
+import { ManageFamilies } from "../components/ManageFamilies"
 
 export interface Family {
     _id: string,
@@ -116,8 +116,8 @@ const Dashboard = () => {
             {/* TODO: create a component to add and delete a family (put at very bottom) */}
             {/* TODO: allow creation of naming a family */}
             <AccountInfo isImpish={isImpish} name={user?.name} email={user?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
+            <ManageFamilies families={user?.families} />
             <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={user?.families} />
-            <Family name={selectedFamily?.name} passcode={selectedFamily?.passcode} />
             <Heading>{selectedFamily.name} Family</Heading>
             {/* TODO: separate out own wishlist into own component */}
             {/* TODO: loop through wishlist by family for different sections of the wishlist */}
@@ -127,7 +127,6 @@ const Dashboard = () => {
             {selectedFamily._id !== '' && < OtherWishlists selectedFamily={selectedFamily} />}
             {/* TODO: shopping list should stay the same */}
             {user?.shoppingList && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={user?.shoppingList} />}
-            <UpdateFamilies families={user?.families} />
         </VStack>
     )
 }

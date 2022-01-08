@@ -111,6 +111,14 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User']
     }),
+    createFamily: builder.mutation<any, string>({
+      query: (name) => ({
+        url: 'families/create',
+        method: 'POST',
+        body: { name }
+      }),
+      invalidatesTags: ['User']
+    }),
   })
 }
 )
@@ -128,5 +136,6 @@ export const {
   useClaimPresentMutation,
   useUnclaimPresentMutation,
   useDeleteFamilyMutation,
-  useAddFamilyMutation
+  useAddFamilyMutation,
+  useCreateFamilyMutation
 } = christmasListApi

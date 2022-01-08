@@ -1,0 +1,1 @@
+export { generateFamilyPasscode } from './generateFamilyPasscode'

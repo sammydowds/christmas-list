@@ -6,10 +6,11 @@ import { userInfo } from 'os'
 import User from '../../../models/User'
 import Family from '../../../models/Family'
 import mongoose from 'mongoose'
+import { generateFamilyPasscode } from '../helpers'
 
-export default withIronSessionApiRoute(addMemberRoute, ironOptions)
+export default withIronSessionApiRoute(createFamilyRoute, ironOptions)
 
-async function addMemberRoute(
+async function createFamilyRoute(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -17,19 +18,19 @@ async function addMemberRoute(
   switch (method) {
     case 'POST':
       const ironUser = req.session.user
-      const { passcode } = req.body
+      const { name } = req.body
       if (ironUser) {
-        if (passcode) {
+        if (name) {
           try {
             await dbConnect()
-            const family = await Family.findOne({ passcode: passcode }).exec()
             const user = await User.findById(ironUser._id).exec()
-            if (family && user) {
-  
-              // add ids and save
-              family.members.push(user._id)
-              user.families.push(family._id)
-              await family.save()
+            if (user) {
+              // create new family with name and associate user
+              const passcode = generateFamilyPasscode()
+              const newFamily = new Family({ name: name, passcode: passcode, members: [user._id] })
+              await newFamily.save()
+
+              user.families.push(newFamily._id)
               await user.save()
   
               res.status(200).json({ success: true })
