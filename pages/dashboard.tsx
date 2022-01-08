@@ -1,12 +1,14 @@
 import { AccountInfo } from "../components/AccountInfo"
-import { List, ListType } from '../components/List'
-import { VStack, Flex, Text, Heading, Select } from '@chakra-ui/react'
-import { useGetUserQuery, useLogoutMutation, useGetFamilyWishlistsQuery } from "../redux/services/christmasList"
+import { VStack, Heading, Select } from '@chakra-ui/react'
+import { useGetUserQuery, useLogoutMutation } from "../redux/services/christmasList"
 import { useEffect, useState } from "react"
 import Router from "next/router"
 import { Family } from "../components/Family"
 import mongoose from "mongoose"
 import { ManageFamilies } from "../components/ManageFamilies"
+import { OthersWishlists } from "../components/OthersWishlists"
+import { OwnWishlist } from "../components/OwnWishlist"
+import { ShoppingList } from "../components/ShoppingList"
 
 export interface Family {
     _id: string,
@@ -37,35 +39,6 @@ export interface FamilyWishlists {
     [name: string]: Present[]
 }
 
-const EmptyOtherWishlists = () => {
-    return (
-        <Flex p='20px' direction='column' justify='center' align='center' borderWidth='2px' borderRadius='10px'>
-            <Heading as='h4' size='md'>No Members To Shop For!</Heading>
-            <Text noOfLines={4}>Please add members to your Family!</Text>
-        </Flex>
-    )
-}
-interface OtherWishlists {
-    selectedFamily: Family
-}
-const OtherWishlists = ({ selectedFamily }: OtherWishlists) => {
-    const { data: familyWishlists, isFetching: isFetchingWishlists, error: wishlistsError } = useGetFamilyWishlistsQuery(selectedFamily._id, {
-        skip: !selectedFamily
-    })
-
-    if (familyWishlists && Object.keys(familyWishlists).length) {
-        return (
-            <>
-                {Object.entries(familyWishlists).map(([name, presents]) => {
-                    return (
-                        <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
-                    )
-                })}
-            </>
-        )
-    }
-    return <EmptyOtherWishlists />
-}
 
 interface SelectFamilyProps {
     onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
@@ -113,20 +86,13 @@ const Dashboard = () => {
     const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) && user.shoppingList.length > 0
     return (
         <VStack my='20px'>
-            {/* TODO: create a component to add and delete a family (put at very bottom) */}
-            {/* TODO: allow creation of naming a family */}
             <AccountInfo isImpish={isImpish} name={user?.name} email={user?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
             <ManageFamilies families={user?.families} />
             <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={user?.families} />
             <Heading>{selectedFamily.name} Family</Heading>
-            {/* TODO: separate out own wishlist into own component */}
-            {/* TODO: loop through wishlist by family for different sections of the wishlist */}
-            {/* TODO: move whishlists above own wishlist */}
-            {user?.wishlist && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={user?.wishlist} />}
-            {/* TODO: modify GET request for family wishlists to handle passing in family ID as well, then make call from component below */}
-            {selectedFamily._id !== '' && < OtherWishlists selectedFamily={selectedFamily} />}
-            {/* TODO: shopping list should stay the same */}
-            {user?.shoppingList && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={user?.shoppingList} />}
+            {user?.wishlist && <OwnWishlist wishlist={user?.wishlist} />}
+            {user?.shoppingList && <ShoppingList shoppingList={user?.shoppingList} />}
+            {selectedFamily._id !== '' && <OthersWishlists selectedFamily={selectedFamily} />}
         </VStack>
     )
 }
