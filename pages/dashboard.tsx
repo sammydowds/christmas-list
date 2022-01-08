@@ -83,15 +83,18 @@ const Dashboard = () => {
         family && setSelectedFamily(family)
     }
 
+    console.log('Wishlist??', user?.wishlist)
+    console.log('user??', user)
+
     const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) && user.shoppingList.length > 0
     return (
         <VStack my='20px'>
             <AccountInfo isImpish={isImpish} name={user?.name} email={user?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
             <ManageFamilies families={user?.families} />
-            <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={user?.families} />
             <Heading>{selectedFamily.name} Family</Heading>
-            {user?.wishlist && <OwnWishlist wishlist={user?.wishlist} />}
-            {user?.shoppingList && <ShoppingList shoppingList={user?.shoppingList} />}
+            {!isFetching && user?.wishlist && <OwnWishlist wishlist={user?.wishlist} />}
+            {!isFetching && user?.shoppingList && <ShoppingList shoppingList={user?.shoppingList} />}
+            <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={user?.families} />
             {selectedFamily._id !== '' && <OthersWishlists selectedFamily={selectedFamily} />}
         </VStack>
     )

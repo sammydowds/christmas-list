@@ -1,2 +1,2 @@
 
-export { AddFamilySection } from './AddFamilySection'
+export { CreateFamilySection } from './CreateFamilySection'
