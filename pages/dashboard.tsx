@@ -22,7 +22,8 @@ export interface Present {
     to: string,
     from: string,
     isBought: boolean,
-    description: string
+    description: string,
+    familyId: string
 }
 
 export interface User {
@@ -88,7 +89,7 @@ const Dashboard = () => {
         <VStack my='20px'>
             <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
             <ManageFamilies families={data?.families} />
-            <OwnWishlist wishlist={data?.wishlist} />
+            <OwnWishlist families={data?.families} wishlist={data?.wishlist} />
             <ShoppingList shoppingList={data?.shoppingList} />
             <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={data?.families} />
             <Heading>{selectedFamily.name} Family</Heading>

@@ -5,6 +5,7 @@ export interface Present {
     to: mongoose.Schema.Types.ObjectId,
     from: mongoose.Schema.Types.ObjectId,
     isBought: boolean
+    familyId?: mongoose.Schema.Types.ObjectId
 }
 
 const PresentSchema = new mongoose.Schema<Present>({
@@ -22,6 +23,10 @@ const PresentSchema = new mongoose.Schema<Present>({
   isBought: {
     type: Boolean,
   },
+  familyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Family"
+  }
 })
 
 export default mongoose.models.Present || mongoose.model('Present', PresentSchema)

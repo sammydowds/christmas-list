@@ -12,41 +12,6 @@ export enum ListType {
   WISHLIST = 'wishlist'
 }
 
-const AddPresent = () => {
-  const [addPresent, { isLoading: isAdding, error: addError }] = useAddPresentMutation()
-  const [presentDescription, setPresentDescription] = useState('')
-
-  const handleSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault()
-    presentDescription !== '' && await addPresent(presentDescription)
-    setPresentDescription('')
-    return
-  }
-
-  const handleChange = ({
-    target: name,
-    }: React.ChangeEvent<HTMLInputElement>) => 
-      setPresentDescription(name.value)
-
-  return(
-    <Input
-        w='100%'
-        h='35px'
-        display='flex'
-        variant='flushed'
-        justifyContent='space-between'
-        textAlign='center'
-        colorScheme='green'
-        value={presentDescription}
-        placeholder={'Add a present'}
-        onBlur={handleSubmit}
-        onChange={handleChange}
-        fontColor='gray'
-        name='description'
-      />
-  )
-}
-
 interface ListItemProps {
   present: Present,
   typeOfList: ListType
@@ -74,7 +39,7 @@ interface ListItemsProps {
   presents: Present[],
   typeOfList: ListType,
 }
-const ListItems = ({ presents, typeOfList }: ListItemsProps) => {
+export const ListItems = ({ presents, typeOfList }: ListItemsProps) => {
   return (
     <>
       {presents?.map((present: Present) => {
@@ -99,7 +64,6 @@ export const List = ({ presents, title, typeOfList }: ListProps) => {
       <VStack spacing='10px'>
         <Heading as='h4' size='m' >{title}</Heading>
         {presents?.length ? <ListItems presents={presents} typeOfList={typeOfList} /> : <EmptyList />}
-        {typeOfList === ListType.OWN_WISHLIST && <AddPresent /> }
       </VStack>
     </Box>
   )

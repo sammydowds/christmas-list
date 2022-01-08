@@ -17,11 +17,11 @@ const FamilySchema = new mongoose.Schema<Family>({
     type: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
-    }]
+    }],
   },
   name: {
     type: String,
-    required: [true, 'Please provide a name for your family.']
+    required: [true, 'Please provide a name for your family.'],
   }
 })
 

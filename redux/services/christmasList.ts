@@ -11,6 +11,11 @@ interface LoginRequest {
   password: string
 }
 
+export interface AddPresentRequest {
+  description: string,
+  familyId: string
+}
+
 export const christmasListApi = createApi({
   reducerPath: 'christmasListApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
@@ -79,11 +84,11 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User', 'Wishlists']
     }),
-    addPresent: builder.mutation<any, string>({
-      query: (description) => ({
+    addPresent: builder.mutation<any, AddPresentRequest>({
+      query: (payload) => ({
         url: 'wishlist/add',
         method: 'POST',
-        body: { description }
+        body: payload
       }),
       invalidatesTags: ['User']
     }),

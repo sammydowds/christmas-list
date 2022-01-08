@@ -27,10 +27,14 @@ async function createFamilyRoute(
             if (user) {
               // create new family with name and associate user
               const passcode = generateFamilyPasscode()
-              const newFamily = new Family({ name: name, passcode: passcode, members: [user._id] })
+              const membersArr = [user._id.toString()]
+              const newFamily = new Family({ name: name, passcode: passcode, members: membersArr })
+              console.log('new family created model instance', newFamily)
               await newFamily.save()
+              console.log('New family saved...?', newFamily)
 
               user.families.push(newFamily._id)
+              console.log('Family id pushed to user...')
               await user.save()
   
               res.status(200).json({ success: true })

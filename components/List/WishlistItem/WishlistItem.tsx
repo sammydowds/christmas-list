@@ -13,11 +13,11 @@ export const WishlistItem = ({ present }: WishlistItemProps) => {
 
     const handleClick = async () => {
         if (!present.from) {
-        await claimPresent(present._id)
-        return
+            await claimPresent(present._id)
+            return
         } else {
-        await unclaimPresent(present._id)
-        return
+            await unclaimPresent(present._id)
+            return
         }
     }
     return (
