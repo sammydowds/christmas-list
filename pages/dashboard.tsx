@@ -89,8 +89,8 @@ const Dashboard = () => {
             <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
             <ManageFamilies families={data?.families} />
             <Heading>{selectedFamily.name} Family</Heading>
-            {!isFetching && data?.wishlist && <OwnWishlist wishlist={data?.wishlist} />}
-            {!isFetching && data?.shoppingList && <ShoppingList shoppingList={data?.shoppingList} />}
+            <OwnWishlist wishlist={data?.wishlist} />
+            <ShoppingList shoppingList={data?.shoppingList} />
             <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={data?.families} />
             {selectedFamily._id !== '' && <OthersWishlists selectedFamily={selectedFamily} />}
         </VStack>
