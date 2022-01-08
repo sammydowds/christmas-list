@@ -1,4 +1,4 @@
-import { List } from "@chakra-ui/react"
+import { List } from "../List"
 import { Present } from "../../pages/dashboard"
 import { ListType } from "../List"
 
@@ -10,6 +10,6 @@ export const ShoppingList = ({ shoppingList }: ShoppingListProps) => {
         return null
     }
     return (
-        <List type={ListType.OWN_WISHLIST} title={'Shopping List'} presents={shoppingList} />
+        <List typeOfList={ListType.SHOPPING} title={'Shopping List'} presents={shoppingList} />
     )
 }
