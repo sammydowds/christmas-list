@@ -36,10 +36,10 @@ const Home: NextPage = () => {
                 <Button colorScheme='green' w='100%' rightIcon={<ExternalLinkIcon />}>Login</Button>
               </Link>
               <Link href='/create'>
-                <Button colorScheme='green' w='100%' rightIcon={<ExternalLinkIcon />}>Create Accound And Join Family</Button>
+                <Button colorScheme='green' w='100%' rightIcon={<ExternalLinkIcon />}>Create Account And Join Family</Button>
               </Link>
               <Link href='/join'>
-                <Button colorScheme='green' w='100%' rightIcon={<ExternalLinkIcon />}>Create Accound And Join Family</Button>
+                <Button colorScheme='green' w='100%' rightIcon={<ExternalLinkIcon />}>Create Account And Join Family</Button>
               </Link>
             </VStack>
           </VStack>
