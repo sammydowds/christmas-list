@@ -1,10 +1,10 @@
-import Family from '../../../models/Family'
+import Family from '../../../../models/Family'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { withIronSessionApiRoute } from 'iron-session/next'
-import { ironOptions } from '../../../utils/ironOptions'
-import dbConnect from '../../../utils/dbConnect'
-import User from '../../../models/User'
-import Present from '../../../models/Present'
+import { ironOptions } from '../../../../utils/ironOptions'
+import dbConnect from '../../../../utils/dbConnect'
+import User from '../../../../models/User'
+import Present from '../../../../models/Present'
 
 export default withIronSessionApiRoute(wishlistsRoute, ironOptions)
 
@@ -13,11 +13,12 @@ async function wishlistsRoute(
   res: NextApiResponse,
 ) {
   const ironUser = req.session.user
+  const { id } = req.query
   if (ironUser) {
     try {
       await dbConnect()
       // check if passcode exists for family
-      const family = await Family.findById(ironUser.family).exec()
+      const family = await Family.findById(id).exec()
       if (family) {
          // find users
          const users = await User.find().where('_id').in(family.members).populate('wishlist').exec();

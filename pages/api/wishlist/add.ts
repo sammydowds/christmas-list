@@ -18,8 +18,8 @@ async function addRoute(
       if (ironUser) {
         try {
           await dbConnect()
-          const { description } = req.body
-          const present = new Present({ description: description, to: ironUser.name })
+          const { description, familyId } = req.body
+          const present = new Present({ description: description, to: ironUser.name, familyId: familyId })
           await present.save()
           if (present._id) {
             const user = await User.findById(ironUser._id).exec()

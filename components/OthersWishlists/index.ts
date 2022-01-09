@@ -1,0 +1,2 @@
+
+export { OthersWishlists } from './OthersWishlists'

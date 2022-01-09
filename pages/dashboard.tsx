@@ -1,68 +1,128 @@
 import { AccountInfo } from "../components/AccountInfo"
-import { Present, List, ListType } from '../components/List'
-import { VStack, Flex, Text, Heading } from '@chakra-ui/react'
-import { useGetUserQuery, useLogoutMutation, useGetFamilyWishlistsQuery } from "../redux/services/christmasList"
-import { useEffect } from "react"
+import { VStack, Heading, Select, useMediaQuery, Grid, GridItem } from '@chakra-ui/react'
+import { useGetUserQuery } from "../redux/services/christmasList"
+import { useEffect, useState } from "react"
 import Router from "next/router"
+import { Family } from "../components/Family"
+import mongoose from "mongoose"
+import { ManageFamilies } from "../components/ManageFamilies"
+import { OthersWishlists } from "../components/OthersWishlists"
+import { OwnWishlist } from "../components/OwnWishlist"
+import { ShoppingList } from "../components/ShoppingList"
 
-interface PresentsByPerson {
+export interface Family {
+    _id: string,
+    members: mongoose.ObjectId[],
+    name: string,
+    passcode: string
+}
+
+export interface Present {
+    _id: string,
+    to: string,
+    from: string,
+    isBought: boolean,
+    description: string,
+    familyId: string
+}
+
+export interface User {
+    _id: string,
+    families: Family[],
+    email: string,
+    wishlist: Present[],
+    shoppingList: Present[],
+    isLoggedIn: boolean,
+    name: string
+}
+
+export interface FamilyWishlists {
     [name: string]: Present[]
 }
 
-const EmptyOtherWishlists = () => {
-    return (
-        <Flex p='20px' direction='column' justify='center' align='center' borderWidth='2px' borderRadius='10px'>
-            <Heading as='h4' size='md'>No Members To Shop For!</Heading>
-            <Text noOfLines={4}>Please add members to your Family!</Text>
-        </Flex>
+
+interface SelectFamilyProps {
+    onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void
+    families?: Family[]
+    selectedFamilyId?: string
+}
+const SelectFamily = ({ families, onChange, selectedFamilyId }: SelectFamilyProps) => {
+    return(
+        <Select w='100%' textAlign='center' value={selectedFamilyId} onChange={onChange} placeholder='Select family'>
+            {
+                families?.map((family) => {
+                    return <option key={family?._id} value={family?._id}>{family?.name} Family</option>
+                })
+            }
+        </Select>
     )
-}
-interface OtherWishlists {
-    presentsByPerson: PresentsByPerson
-}
-const OtherWishlists = ({ presentsByPerson }: OtherWishlists) => {
-    if (Object.keys(presentsByPerson).length) {
-        return (
-            <>
-                {Object.entries(presentsByPerson).map(([name, presents]) => {
-                    return (
-                        <List key={`${name}-wishlist`} listType={ListType.WISHLIST} title={`${name} Wishlist`} presents={presents} />
-                    )
-                })}
-            </>
-        )
-    }
-    return <EmptyOtherWishlists />
 }
 
 
 const Dashboard = () => {
-    const { data: user = {}, isFetching } = useGetUserQuery()
-    const { data: familyWishlists, isFetching: isFetchingWishlists, error: wishlistsError } = useGetFamilyWishlistsQuery()
-    const [logout] = useLogoutMutation()
+    const [isLargerThan880] = useMediaQuery('(min-width:880px)')
+    const { data, isFetching } = useGetUserQuery()
+    const [selectedFamily, setSelectedFamily] = useState({_id: '', name: '', passcode: '', members: []} as Family)
 
     useEffect(() => {
-        if (!user?.isLoggedIn && isFetching === false) {
+        if (!data?.isLoggedIn && isFetching === false) {
             Router.push('/login')
         }
-    }, [user, isFetching])
+    }, [data, isFetching])
 
-    const handleLogout = () => {
-        logout()
-        Router.push('/login')
+    const handleSelectedFamilyIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        event.preventDefault()
+        const familyId = event.target.value
+        const family = data?.families.filter((family: Family) => {
+            return family._id === familyId
+        })[0]
+        family && setSelectedFamily(family)
     }
 
-    const { shoppingList, wishlist, family } = user
+    const isImpish = data?.shoppingList && Array.isArray(data?.shoppingList) && data.shoppingList.length > 0
 
-    const isImpish = user?.shoppingList && Array.isArray(user?.shoppingList) && user.shoppingList.length > 0
-    return (
-        <VStack my='20px'>
-            <AccountInfo isImpish={isImpish} email={user?.email} passcode={family?.passcode} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
-            {wishlist && < List listType={ListType.OWN_WISHLIST} title={'Your Wishlist'} presents={wishlist} />}
-            {familyWishlists && < OtherWishlists presentsByPerson={familyWishlists} />}
-            {shoppingList && <List listType={ListType.SHOPPING} title={'Your Shopping List'} presents={shoppingList} />}
-        </VStack>
-    )
+    if (isLargerThan880) {
+        return (
+            <Grid 
+                h='100vh'
+                templateColumns='repeat(5, 1fr)'
+                gap='20px'
+            >
+                <GridItem colSpan={2} p='20px'>
+                    <VStack>
+                        <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} />
+                        <ManageFamilies families={data?.families} />
+                    </VStack>
+                </GridItem>
+                <GridItem colSpan={3} p='20px' textAlign='center' overflow='scroll'>
+                    <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={data?.families} />
+                    <Heading>{selectedFamily.name} Family</Heading>
+                    {selectedFamily._id !== '' && <OthersWishlists selectedFamily={selectedFamily} />}
+                </GridItem>
+            </Grid>
+        )
+    } else {
+        return (
+            <Grid
+                gap='20px'
+                m='20px'
+            >
+                <GridItem>
+                    <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} />
+                </GridItem>
+                <GridItem>
+                    <VStack>
+                        <ManageFamilies families={data?.families} />
+                        <OwnWishlist families={data?.families} wishlist={data?.wishlist} />
+                        <ShoppingList shoppingList={data?.shoppingList} />
+                        <Heading>Family Wishlists</Heading>
+                        <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={data?.families} />
+                        {selectedFamily._id !== '' && <OthersWishlists selectedFamily={selectedFamily} />}
+                    </VStack>
+                </GridItem>
+            </Grid>
+        )
+    }
 }
 
 export default Dashboard

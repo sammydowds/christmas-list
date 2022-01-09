@@ -1,0 +1,2 @@
+
+export { OwnWishlist } from './OwnWishlist'

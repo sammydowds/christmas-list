@@ -5,18 +5,9 @@ import Family from "../../models/Family";
 import User from "../../models/User";
 import Present from '../../models/Present'
 import dbConnect from "../../utils/dbConnect";
+import { generateFamilyPasscode } from "./helpers";
 
 // TODO: type the User here
-
-const generateFamilyPasscode = (length: number) => {
-  let result = ''
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length
-  for ( let i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
- }
- return result
-}
 
 export default withIronSessionApiRoute(userRoute, ironOptions);
 
@@ -27,14 +18,14 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
       const ironUser = req?.session?.user
       if (ironUser) {
         await dbConnect()
-        const { wishlist, shoppingList } = await User.findById(ironUser._id).exec()
+        const { wishlist, shoppingList, families } = await User.findById(ironUser._id).exec()
 
         // note: could break these out into separate GET requests
         const wishlistPresents = await Present.find().where('_id').in(wishlist).exec()
         const shoppingListPresents = await Present.find().where('_id').in(shoppingList).exec()
-        const userFamily = await Family.findById(ironUser.family).exec()
+        const userFamilies = await Family.find({ _id: { $in: families } })
 
-        return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppingList: shoppingListPresents, family: userFamily})
+        return res.status(200).json({...ironUser, wishlist: wishlistPresents, shoppingList: shoppingListPresents, families: userFamilies})
       } else {
         return res.status(401).json({ error: 'Not authorized'});
       }
@@ -42,7 +33,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
     case 'POST':
       // get form data
       await dbConnect()
-      const { email, password, passcode, name } = req.body
+      const { email, password, passcode, name, familyName } = req.body
 
       // passcode exists only when trying to join a family
       if (passcode) {
@@ -58,7 +49,7 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
             await newUser.save()
             family.members.push(newUser._id.toString())
             await family.save()
-            const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, family: newUser.family, email: newUser.email }
+            const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, families: newUser.families, email: newUser.email }
             req.session.user = ironUser
             await req.session.save()
             return res.status(200).json(newUser)
@@ -68,17 +59,17 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse) {
         break
       } else {
         // create family
-        const passcode = generateFamilyPasscode(25)
-        const family = new Family({ passcode: passcode })
+        const passcode = generateFamilyPasscode()
+        const family = new Family({ name: familyName, passcode: passcode })
         await family.save()
 
         // relate family and user
-        const familyId = family._id.toString()
-        const newUser = new User({ name: name, email: email, password: password, family: familyId})
+        const familyIdArr = [family._id.toString()]
+        const newUser = new User({ name: name, email: email, password: password, families: familyIdArr})
         await newUser.save()
         family.members = [newUser._id.toString()]
         await family.save()
-        const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, family: newUser.family, email: newUser.email }
+        const ironUser = { _id: newUser._id, isLoggedIn: true, name: newUser.name, families: newUser.families, email: newUser.email }
         req.session.user = ironUser
         await req.session.save()
         return res.status(200).json(newUser)

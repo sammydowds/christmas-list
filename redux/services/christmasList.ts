@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { FamilyWishlists, User } from '../../pages/dashboard'
 // TODO: type login response and request 
 
 const prodUrl = 'https://christmas-list-woad.vercel.app/api/'
@@ -8,6 +9,11 @@ const baseUrl = process.env.NODE_ENV === 'production' ? prodUrl : 'http://localh
 interface LoginRequest {
   email: string,
   password: string
+}
+
+export interface AddPresentRequest {
+  description: string,
+  familyId: string
 }
 
 export const christmasListApi = createApi({
@@ -30,7 +36,7 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User', 'Wishlists']
     }),
-    getUser: builder.query<any, void>({
+    getUser: builder.query<User, void>({
       query: () => 'user',
       providesTags: ['User']
     }),
@@ -42,8 +48,8 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User', 'Wishlists']
     }),
-    getFamilyWishlists: builder.query<any, void>({
-      query: () => 'wishlists/family',
+    getFamilyWishlists: builder.query<FamilyWishlists, string>({
+      query: (id) => `wishlists/family/${id}`,
       providesTags: ['Wishlists']
     }),
     claimPresent: builder.mutation<any, string>({
@@ -78,11 +84,11 @@ export const christmasListApi = createApi({
       }),
       invalidatesTags: ['User', 'Wishlists']
     }),
-    addPresent: builder.mutation<any, string>({
-      query: (description) => ({
+    addPresent: builder.mutation<any, AddPresentRequest>({
+      query: (payload) => ({
         url: 'wishlist/add',
         method: 'POST',
-        body: { description }
+        body: payload
       }),
       invalidatesTags: ['User']
     }),
@@ -91,6 +97,30 @@ export const christmasListApi = createApi({
         url: 'wishlist/delete',
         method: 'POST',
         body: { id }
+      }),
+      invalidatesTags: ['User']
+    }),
+    addFamily: builder.mutation<any, string>({
+      query: (passcode) => ({
+        url: 'families/add',
+        method: 'POST',
+        body: { passcode }
+      }),
+      invalidatesTags: ['User']
+    }),
+    deleteFamily: builder.mutation<any, string>({
+      query: (id) => ({
+        url: 'families/delete',
+        method: 'POST',
+        body: { id }
+      }),
+      invalidatesTags: ['User']
+    }),
+    createFamily: builder.mutation<any, string>({
+      query: (name) => ({
+        url: 'families/create',
+        method: 'POST',
+        body: { name }
       }),
       invalidatesTags: ['User']
     }),
@@ -109,5 +139,8 @@ export const {
   useAddPresentMutation,
   useDeletePresentMutation,
   useClaimPresentMutation,
-  useUnclaimPresentMutation
+  useUnclaimPresentMutation,
+  useDeleteFamilyMutation,
+  useAddFamilyMutation,
+  useCreateFamilyMutation
 } = christmasListApi
