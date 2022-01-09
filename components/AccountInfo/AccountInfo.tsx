@@ -38,16 +38,16 @@ interface AccountInfoProps {
 
 export const AccountInfo = ({ name, isImpish, email, onClickDeleteAccount, onClickLogout }: AccountInfoProps) => {
   return(
-    <Box maxW='300px'>
+    <Box w='100%'>
       <VStack>
         <Text as='i' color='grey' display='flex'>Connected to Northpole Servers:&nbsp; <Image src={'/images/check-circle.svg'} height={20} width={20} /></Text>
-        <Box borderWidth='2px' p='10px' borderRadius='10px'>
+        <Box w='100%' borderWidth='2px' p='10px' borderRadius='10px'>
           <Flex display='column'>
             <Heading as='h4' size='sm'>Profile</Heading>
             <Text as='div'>Name: {name}</Text>
             <Text as='div'>Email: {email}</Text>
             <Text as='div' display='flex'>Status:&nbsp; {isImpish ? <ImpishStatus /> : <AdmirableStatus />}</Text>
-            <ButtonGroup mt='5px'>
+            <ButtonGroup mt='5px' w='100%' justifyContent='center'>
               <Button onClick={onClickDeleteAccount} colorScheme='red'>Delete Account</Button>
               <Button onClick={onClickLogout} colorScheme='blue'>Logout</Button>
             </ButtonGroup>

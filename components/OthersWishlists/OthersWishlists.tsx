@@ -5,7 +5,7 @@ import { List, ListType } from "../List"
 
 const EmptyOtherWishlists = () => {
     return (
-        <Flex p='20px' direction='column' justify='center' align='center' borderWidth='2px' borderRadius='10px'>
+        <Flex p='20px' w='100%' direction='column' justify='center' align='center' borderWidth='2px' borderRadius='10px'>
             <Heading as='h4' size='md'>No Members To Shop For!</Heading>
             <Text noOfLines={4}>Please add members to your Family!</Text>
         </Flex>

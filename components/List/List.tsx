@@ -60,9 +60,9 @@ export interface ListProps {
 }
 export const List = ({ presents, title, typeOfList }: ListProps) => {
   return (
-    <Box pt='15px' pb='25px' px='20px' minW='300px' bgColor='#E0C9A625' borderRadius={10} textAlign='center'>
+    <Box pt='15px' pb='25px' px='20px' w='100%' bgColor='#E0C9A625' borderRadius={10} textAlign='center'>
       <VStack spacing='10px'>
-        <Heading as='h4' size='m' >{title}</Heading>
+        <Heading as='h4' size='lg' >{title}</Heading>
         {presents?.length ? <ListItems presents={presents} typeOfList={typeOfList} /> : <EmptyList />}
       </VStack>
     </Box>

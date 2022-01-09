@@ -10,7 +10,7 @@ interface ManageFamilyProps {
 }
 export const ManageFamilies = ({ families }: ManageFamilyProps) => {
     return (
-        <Box borderWidth='2px' p='20px' borderRadius='10px'>
+        <Box w='100%' borderWidth='2px' p='20px' borderRadius='10px'>
             <AddFamilySection />
             <CreateFamilySection />
             <DeleteFamilySection families={families} />
