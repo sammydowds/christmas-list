@@ -1,6 +1,6 @@
 import { AccountInfo } from "../components/AccountInfo"
-import { VStack, Heading, Select, useMediaQuery, Grid, GridItem, Flex, Spacer } from '@chakra-ui/react'
-import { useGetUserQuery, useLogoutMutation } from "../redux/services/christmasList"
+import { VStack, Heading, Select, useMediaQuery, Grid, GridItem } from '@chakra-ui/react'
+import { useGetUserQuery } from "../redux/services/christmasList"
 import { useEffect, useState } from "react"
 import Router from "next/router"
 import { Family } from "../components/Family"
@@ -51,7 +51,7 @@ const SelectFamily = ({ families, onChange, selectedFamilyId }: SelectFamilyProp
         <Select w='100%' textAlign='center' value={selectedFamilyId} onChange={onChange} placeholder='Select family'>
             {
                 families?.map((family) => {
-                    return <option key={family?._id} value={family?._id}>{family?.name}</option>
+                    return <option key={family?._id} value={family?._id}>{family?.name} Family</option>
                 })
             }
         </Select>
@@ -62,7 +62,6 @@ const SelectFamily = ({ families, onChange, selectedFamilyId }: SelectFamilyProp
 const Dashboard = () => {
     const [isLargerThan880] = useMediaQuery('(min-width:880px)')
     const { data, isFetching } = useGetUserQuery()
-    const [logout] = useLogoutMutation()
     const [selectedFamily, setSelectedFamily] = useState({_id: '', name: '', passcode: '', members: []} as Family)
 
     useEffect(() => {
@@ -70,11 +69,6 @@ const Dashboard = () => {
             Router.push('/login')
         }
     }, [data, isFetching])
-
-    const handleLogout = () => {
-        logout()
-        Router.push('/login')
-    }
 
     const handleSelectedFamilyIdChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         event.preventDefault()
@@ -96,7 +90,7 @@ const Dashboard = () => {
             >
                 <GridItem colSpan={2} p='20px'>
                     <VStack>
-                        <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
+                        <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} />
                         <ManageFamilies families={data?.families} />
                     </VStack>
                 </GridItem>
@@ -110,20 +104,19 @@ const Dashboard = () => {
     } else {
         return (
             <Grid
-                h='100vh'
                 gap='20px'
-                p='20px'
+                m='20px'
             >
                 <GridItem>
-                    <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} onClickDeleteAccount={() => alert('Delete account...')} onClickLogout={handleLogout} />
+                    <AccountInfo isImpish={isImpish} name={data?.name} email={data?.email} />
                 </GridItem>
-                <GridItem overflow='scroll'>
+                <GridItem>
                     <VStack>
                         <ManageFamilies families={data?.families} />
                         <OwnWishlist families={data?.families} wishlist={data?.wishlist} />
                         <ShoppingList shoppingList={data?.shoppingList} />
+                        <Heading>Family Wishlists</Heading>
                         <SelectFamily selectedFamilyId={selectedFamily._id} onChange={handleSelectedFamilyIdChange} families={data?.families} />
-                        <Heading>{selectedFamily.name} Family</Heading>
                         {selectedFamily._id !== '' && <OthersWishlists selectedFamily={selectedFamily} />}
                     </VStack>
                 </GridItem>

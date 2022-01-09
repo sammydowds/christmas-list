@@ -1,15 +1,17 @@
 import Image from 'next/image'
 import { Box, VStack, Text, Flex, Heading, ButtonGroup, Button } from '@chakra-ui/react'
 import React from 'react'
+import { useLogoutMutation } from '../../redux/services/christmasList'
+import Router from "next/router"
 
 const ImpishStatus = () => {
   return(
-    <Text color='red'>
+    <Text display='inline' color='red'>
     IMPISH
     <Image 
       src='/images/impish.svg'
-      height={20}
-      width={20}
+      height={12}
+      width={12}
     />
     </Text>
   )
@@ -17,12 +19,12 @@ const ImpishStatus = () => {
 
 const AdmirableStatus = () => {
   return(
-    <Text textAlign='center' color='green'>
+    <Text display='inline' textAlign='center' color='green'>
       ADMIRABLE
       <Image 
         src='/images/sm-santa.svg'
-        height={20}
-        width={20}
+        height={12}
+        width={12}
       />
     </Text>
   )
@@ -32,11 +34,16 @@ interface AccountInfoProps {
   email?: string
   name?: string
   isImpish?: boolean
-  onClickDeleteAccount?: () => void
-  onClickLogout?: () => void
 }
 
-export const AccountInfo = ({ name, isImpish, email, onClickDeleteAccount, onClickLogout }: AccountInfoProps) => {
+export const AccountInfo = ({ name, isImpish, email }: AccountInfoProps) => {
+  const [logout] = useLogoutMutation()
+
+  const handleLogout = () => {
+      logout()
+      Router.push('/login')
+  }
+  const message = `Welcome ${name} (${email}). Your current status according to Santa's list is`
   return(
     <Box w='100%'>
       <VStack>
@@ -44,12 +51,12 @@ export const AccountInfo = ({ name, isImpish, email, onClickDeleteAccount, onCli
         <Box w='100%' borderWidth='2px' p='10px' borderRadius='10px'>
           <Flex display='column'>
             <Heading as='h4' size='sm'>Profile</Heading>
-            <Text as='div'>Name: {name}</Text>
-            <Text as='div'>Email: {email}</Text>
-            <Text as='div' display='flex'>Status:&nbsp; {isImpish ? <ImpishStatus /> : <AdmirableStatus />}</Text>
-            <ButtonGroup mt='5px' w='100%' justifyContent='center'>
-              <Button onClick={onClickDeleteAccount} colorScheme='red'>Delete Account</Button>
-              <Button onClick={onClickLogout} colorScheme='blue'>Logout</Button>
+            <Text fontSize='12px' as='span'>
+              {message}&nbsp;
+              {isImpish ? <ImpishStatus /> : <AdmirableStatus />}
+            </Text>
+            <ButtonGroup mt='5px' w='100%' justifyContent='flex-end'>
+              <Button size='sm' onClick={handleLogout} colorScheme='blue'>Logout</Button>
             </ButtonGroup>
           </Flex>
         </Box>
