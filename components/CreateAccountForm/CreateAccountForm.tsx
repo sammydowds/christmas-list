@@ -1,8 +1,8 @@
-import { Box, Button, VStack, FormLabel, FormControl, Input, Heading } from '@chakra-ui/react'
+import { Box, Button, VStack, FormLabel, FormControl, Input, Heading, ButtonGroup } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import Router from 'next/router'
 import { useCreateAccountMutation } from '../../redux/services/christmasList'
-import Image from 'next/image'
+import Link from 'next/link'
 
 
 // TODO: create second password field to make sure they match
@@ -21,10 +21,9 @@ export const CreateAccountForm = () => {
       setFormState((prev) => ({...prev, [name]: value }))
   
   return (
-    <Box p={8} maxWidth="500px" borderWidth={1} borderRadius={8} boxShadow="lg">
+    <Box p={8} maxWidth="500px">
       <form onSubmit={handleSubmit}>
 	<VStack minW='300px' spacing='20px'>
-	  <Image src='/images/sm-santa.svg' height={75} width={75} />
 	  <Heading as='h4' size='sm'>Create an Account and Join Family!</Heading>
 	  <FormControl isRequired>
 	    <FormLabel htmlFor='name'>Name</FormLabel>
@@ -42,7 +41,12 @@ export const CreateAccountForm = () => {
 	    <FormLabel htmlFor='passcode'>Enter the Family Passcode</FormLabel>
 	    <Input onChange={handleChange} name="passcode" variant='flushed' focusBorderColor='green.400' size='lg' type='text' placeholder='Enter family passcode' />
 	  </FormControl>
-	  <Button type="submit" isLoading={isLoading} isFullWidth size='md' colorScheme="green">Create Account And Join Family</Button>
+	  <ButtonGroup w='100%'>
+	  	<Link href='/'>
+			<Button w='100%'>Home</Button>
+		</Link>
+		<Button type="submit" isLoading={isLoading} isFullWidth size='md' colorScheme="green">Join</Button>
+	  </ButtonGroup>
 	  {error && <Box maxW='250px' height='50px'>
 	    {/*
 	    // @ts-ignore */}
